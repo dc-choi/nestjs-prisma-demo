@@ -1,0 +1,18 @@
+{
+    "moduleFileExtensions": ["js", "json", "ts"],
+    "rootDir": ".",
+    "testEnvironment": "node",
+    "transform": {
+        "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "moduleNameMapper": {
+        "^@common(.*)$": "<rootDir>/src/common$1",
+        "^@device(.*)$": "<rootDir>/src/device$1",
+        "^@item(.*)$": "<rootDir>/src/item$1",
+        "^@user(.*)$": "<rootDir>/src/user$1",
+        "^@conatiner(.*)$": "<rootDir>/src/conatiner$1",
+        "^@location(.*)$": "<rootDir>/src/location$1",
+        "^@auth(.*)$": "<rootDir>/src/auth$1",
+        "^prisma(.*)$": "<rootDir>/prisma$1"
+    }
+}

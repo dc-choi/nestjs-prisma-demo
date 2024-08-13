@@ -1,0 +1,172 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Member {
+  id             BigInt     @id @default(autoincrement()) @db.BigInt
+  name           String     @db.VarChar(255)
+  email          String     @db.VarChar(255)
+  hashedPassword String?    @map("hashed_password") @db.VarChar(128)
+  phone          String     @db.VarChar(255)
+  role           MemberRole @default(USER)
+  lastLoginAt    DateTime?  @map("last_login_at") @db.DateTime(0)
+  createdAt      DateTime   @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt      DateTime   @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt      DateTime?  @map("deleted_at") @db.DateTime(0)
+
+  Subscribe Subscribe[]
+
+  SubscribeDetail SubscribeDetail[]
+
+  Payment Payment[]
+
+  Transaction Transaction[]
+
+  @@map("members")
+}
+
+enum MemberRole {
+  ADMIN
+  USER
+  GUEST
+}
+
+model Subscribe {
+  id               BigInt          @id @default(autoincrement()) @db.BigInt
+  status           SubscribeStatus @default(USE)
+  type             SubscribeType   @default(FULL)
+  cycle            SubscribeCycle  @default(MONTHLY)
+  big              Int?            @default(0) @map("big") @db.Int
+  small            Int?            @default(0) @map("small") @db.Int
+  totalPrice       Decimal         @map("total_price") @db.Decimal(20, 3)
+  initialPaymentAt DateTime        @map("initial_payment_at") @db.DateTime(0)
+  paymentAt        DateTime        @map("payment_at") @db.DateTime(0)
+  usagePeriod      String          @map("usage_period") @db.VarChar(255)
+  createdAt        DateTime        @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt        DateTime        @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt        DateTime?       @map("deleted_at") @db.DateTime(0)
+
+  member   Member @relation(fields: [memberId], references: [id], map: "FK_subscribe_member")
+  memberId BigInt @map("member_id")
+
+  SubscribeDetail SubscribeDetail[]
+
+  Payment Payment[]
+
+  @@map("subscribes")
+}
+
+enum SubscribeStatus {
+  USE
+  STOP
+}
+
+enum SubscribeType {
+  HARDWARE
+  DOCUMENT
+  FULL
+}
+
+enum SubscribeCycle {
+  MONTHLY
+  YEARLY
+}
+
+model SubscribeDetail {
+  id          BigInt    @id @default(autoincrement()) @db.BigInt
+  customerKey String    @map("customer_key") @db.VarChar(255)
+  billingKey  String    @map("billing_key") @db.VarChar(255)
+  issuer      String    @map("issuer") @db.VarChar(255)
+  acquirer    String    @map("acquirer") @db.VarChar(255)
+  cardNumber  String    @map("card_number") @db.VarChar(255)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt   DateTime? @map("deleted_at") @db.DateTime(0)
+
+  member   Member @relation(fields: [memberId], references: [id], map: "FK_subscribe_detail_member")
+  memberId BigInt @map("member_id")
+
+  subscribe   Subscribe @relation(fields: [subscribeId], references: [id], map: "FK_subscribe_detail_subscribe")
+  subscribeId BigInt    @map("subscribe_id")
+
+  @@map("subscribe_details")
+}
+
+model Payment {
+  id                    BigInt        @id @default(autoincrement()) @db.BigInt
+  status                PaymentStatus @default(DONE)
+  orderId               String        @map("order_id") @db.VarChar(255)
+  orderName             String        @map("order_name") @db.VarChar(255)
+  paymentKey            String        @map("payment_key") @db.VarChar(255)
+  currency              String?       @map("currency") @db.VarChar(255)
+  method                String?       @map("method") @db.VarChar(255)
+  totalPrice            Decimal       @map("total_price") @db.Decimal(20, 3)
+  suppliedPrice         Decimal       @map("supplied_price") @db.Decimal(20, 3)
+  taxFreePrice          Decimal       @map("tax_free_price") @db.Decimal(20, 3)
+  vat                   Decimal       @map("vat") @db.Decimal(20, 3)
+  issuer                String        @map("issuer") @db.VarChar(255)
+  acquirer              String        @map("acquirer") @db.VarChar(255)
+  cardNumber            String        @map("card_number") @db.VarChar(255)
+  cardExpirationYear    String?       @map("card_expiration_year") @db.VarChar(255)
+  cardExpirationMonth   String?       @map("card_expiration_month") @db.VarChar(255)
+  isPartialCancelable   Boolean       @default(true) @map("is_partial_cancelable") @db.TinyInt
+  installmentPlanMonths Int?          @map("installment_plan_months") @db.Int
+  isInterestFree        Boolean?      @map("is_interest_free") @db.TinyInt
+  requestedAt           DateTime?     @map("requested_at") @db.DateTime(0)
+  approvedAt            DateTime?     @map("approved_at") @db.DateTime(0)
+  receipt               String?       @map("receipt") @db.VarChar(1024)
+  createdAt             DateTime      @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt             DateTime      @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt             DateTime?     @map("deleted_at") @db.DateTime(0)
+
+  member   Member @relation(fields: [memberId], references: [id], map: "FK_payment_member")
+  memberId BigInt @map("member_id")
+
+  subscribe   Subscribe @relation(fields: [subscribeId], references: [id], map: "FK_payment_subscribe")
+  subscribeId BigInt    @map("subscribe_id")
+
+  Transaction Transaction[]
+
+  @@map("payments")
+}
+
+enum PaymentStatus {
+  READY
+  IN_PROGRESS
+  WAITING_FOR_DEPOSIT
+  DONE
+  CANCELED
+  PARTIAL_CANCELED
+  ABORTED
+  EXPIRED
+}
+
+model Transaction {
+  id             BigInt          @id @default(autoincrement()) @db.BigInt
+  type           TransactionType @default(PAYMENT)
+  totalPrice     Decimal         @map("total_price") @db.Decimal(20, 3)
+  transactionKey String?         @map("transaction_key") @db.VarChar(255)
+  createdAt      DateTime        @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt      DateTime        @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt      DateTime?       @map("deleted_at") @db.DateTime(0)
+
+  member   Member @relation(fields: [memberId], references: [id], map: "FK_transaction_member")
+  memberId BigInt @map("member_id")
+
+  payment   Payment @relation(fields: [paymentId], references: [id], map: "FK_transaction_payment")
+  paymentId BigInt  @map("payment_id")
+}
+
+enum TransactionType {
+  PAYMENT
+  REFUND
+}

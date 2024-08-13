@@ -1,0 +1,35 @@
+{
+    "moduleFileExtensions": ["js", "json", "ts"],
+    "rootDir": ".",
+    "testRegex": ".*\\.test\\.ts$",
+    "transform": {
+        "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": ["**/src/**/*.(t|j)s", "!**/dist/**/*.(t|j)s"],
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+        "^@common/(.*)$": "<rootDir>/src/common/$1",
+        "^@device/(.*)$": "<rootDir>/src/device/$1",
+        "^@item/(.*)$": "<rootDir>/src/item/$1",
+        "^@member/(.*)$": "<rootDir>/src/member/$1",
+        "^@auth/(.*)$": "<rootDir>/src/auth/$1",
+        "^@sensor/(.*)$": "<rootDir>/src/sensor/$1",
+        "^@home/(.*)$": "<rootDir>/src/home/$1",
+        "^@branch/(.*)$": "<rootDir>/src/branch/$1",
+        "^@stock/(.*)$": "<rootDir>/src/stock/$1",
+        "^@manager/(.*)$": "<rootDir>/src/manager/$1",
+        "^@mail/(.*)$": "<rootDir>/src/mail/$1",
+        "^@report/(.*)$": "<rootDir>/src/report/$1",
+        "^@location/(.*)$": "<rootDir>/src/location/$1",
+        "^@container/(.*)$": "<rootDir>/src/container/$1",
+        "^@usageLog/(.*)$": "<rootDir>/src/usageLog/$1",
+        "^@recipe/(.*)$": "<rootDir>/src/recipe/$1",
+        "^@notification/(.*)$": "<rootDir>/src/notification/$1",
+        "^@itemStockAdjustment/(.*)$": "<rootDir>/src/itemStockAdjustment/$1",
+        "^@productionLog/(.*)$": "<rootDir>/src/productionLog/$1",
+        "^@salesLog/(.*)$": "<rootDir>/src/salesLog/$1",
+        "^prisma(.*)$": "<rootDir>/prisma$1",
+        "^test(.*)$": "<rootDir>/test/$1"
+    }
+}
