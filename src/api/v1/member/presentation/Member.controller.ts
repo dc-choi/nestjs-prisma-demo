@@ -1,4 +1,4 @@
-import { ExistingMember, InvalidMember } from "@global/common/error";
+import { ExistingMember, InvalidMember } from "@global/common/error/MemberError";
 import { Body, Controller, Get, HttpCode, HttpStatus, Post } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 

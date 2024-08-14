@@ -1,4 +1,4 @@
-import { ExistingMember, InvalidMember } from "@global/common/error";
+import { ExistingMember, InvalidMember } from "@global/common/error/MemberError";
 import { EnvConfig } from "@global/env/Env.config";
 import { BadRequestException, ConflictException, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";

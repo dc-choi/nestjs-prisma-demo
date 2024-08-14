@@ -3,6 +3,7 @@ import { MemberModule } from "@api/v1/member/Member.module";
 import { PaymentModule } from "@api/v1/payment/Payment.module";
 import { SubscribeModule } from "@api/v1/subscribe/Subscribe.module";
 import { TransactionModule } from "@api/v1/transaction/Transaction.module";
+import { TokenModule } from "@global/jwt/Token.module";
 import { winstonTransports } from "@global/logger/Winston.config";
 import { MailModule } from "@infra/mail/Mail.module";
 import { RedisModule } from "@infra/redis/Redis.module";
@@ -38,6 +39,7 @@ import { DaoModule } from "prisma/dao.module";
         TransactionModule,
         MailModule,
         RedisModule,
+        TokenModule,
     ],
     controllers: [],
 })
