@@ -1,8 +1,8 @@
-import { AuthModule } from "@api/auth/Auth.module";
-import { MemberModule } from "@api/member/Member.module";
-import { PaymentModule } from "@api/payment/Payment.module";
-import { SubscribeModule } from "@api/subscribe/Subscribe.module";
-import { TransactionModule } from "@api/transaction/Transaction.module";
+import { AuthModule } from "@api/v1/auth/Auth.module";
+import { MemberModule } from "@api/v1/member/Member.module";
+import { PaymentModule } from "@api/v1/payment/Payment.module";
+import { SubscribeModule } from "@api/v1/subscribe/Subscribe.module";
+import { TransactionModule } from "@api/v1/transaction/Transaction.module";
 import { DaoModule } from "@global/dao/Dao.module";
 import { winstonTransports } from "@global/logger/Winston.config";
 import { MailModule } from "@infra/mail/Mail.module";

@@ -33,7 +33,7 @@ const swaggerSetup = (app: INestApplication, prefix: string) => {
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    const prefix = "api/v1";
+    const prefix = "api";
 
     app.useGlobalInterceptors(new HttpLoggingInterceptor());
 
