@@ -1,0 +1,15 @@
+export const IdBlackList = Object.freeze([
+    "admin",
+    "administrator",
+    "root",
+    "rootadmin",
+    "superuser",
+    "super",
+    "sysadmin",
+    "system",
+    "systemadministrator",
+    "systemadmin",
+    "sysadministrator",
+    "sysadmin",
+    "systemadmin",
+]);
