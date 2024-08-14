@@ -1,11 +1,12 @@
-import { AuthModule } from "@domain/auth/Auth.module";
-import { MemberModule } from "@domain/member/Member.module";
-import { PaymentModule } from "@domain/payment/Payment.module";
-import { SubscribeModule } from "@domain/subscribe/Subscribe.module";
-import { TransactionModule } from "@domain/transaction/Transaction.module";
+import { AuthModule } from "@api/auth/Auth.module";
+import { MemberModule } from "@api/member/Member.module";
+import { PaymentModule } from "@api/payment/Payment.module";
+import { SubscribeModule } from "@api/subscribe/Subscribe.module";
+import { TransactionModule } from "@api/transaction/Transaction.module";
+import { DaoModule } from "@global/dao/Dao.module";
 import { winstonTransports } from "@global/logger/Winston.config";
 import { MailModule } from "@infra/mail/Mail.module";
-import { RedisModule } from "@infra/redis/redis.module";
+import { RedisModule } from "@infra/redis/Redis.module";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 
@@ -38,6 +39,7 @@ import { PrismaModule } from "prisma/prisma.module";
         TransactionModule,
         MailModule,
         RedisModule,
+        DaoModule,
     ],
     controllers: [],
 })

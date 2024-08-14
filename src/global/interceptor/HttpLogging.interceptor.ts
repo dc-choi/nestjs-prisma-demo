@@ -1,5 +1,5 @@
-import { infoLogger } from "@global/logger/Winston.config";
 import { deletePasswordInLog } from "@global/common/utils/password";
+import { infoLogger } from "@global/logger/Winston.config";
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
 
 import { Observable } from "rxjs";

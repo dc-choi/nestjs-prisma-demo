@@ -13,8 +13,8 @@ export class RedisService {
         this.redisClient.connect();
     }
 
-    async set(key: string, value: string | number) {
-        await this.redisClient.set(key, value, { EX: 180 });
+    async set(key: string, value: string | number, expire: number = 180) {
+        await this.redisClient.set(key, value, { EX: expire });
     }
 
     async get(key: string) {
