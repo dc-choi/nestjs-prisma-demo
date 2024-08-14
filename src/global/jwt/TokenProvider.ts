@@ -1,10 +1,10 @@
-import { Unauthorized } from "@global/common/error/AuthError";
+import { InvalidRefreshToken } from "@global/common/error/AuthError";
 import { WEEK } from "@global/common/utils/time";
 import { Redis } from "@infra/redis/Redis";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 
-import { randomUUID } from "crypto";
+import { v4 as uuid } from "uuid";
 
 @Injectable()
 export class TokenProvider {
@@ -31,9 +31,9 @@ export class TokenProvider {
     /**
      * refreshToken 검증
      */
-    public async validateRefreshToken(memberId: bigint, refreshToken: string) {
+    public async velifyRefreshToken(memberId: bigint, refreshToken: string) {
         const redisToken = await this.redis.get(`token:${memberId}`);
-        if (redisToken !== refreshToken) throw new UnauthorizedException(new Unauthorized());
+        if (redisToken !== refreshToken) throw new UnauthorizedException(new InvalidRefreshToken());
 
         return redisToken;
     }
@@ -57,7 +57,7 @@ export class TokenProvider {
         let refreshToken = await this.redis.get(`token:${memberId}`);
         if (refreshToken) this.redis.del(`token:${memberId}`);
 
-        refreshToken = randomUUID();
+        refreshToken = uuid();
 
         // INFO: refreshToken의 유효기간은 2주로 설정
         await this.redis.set(`token:${memberId}`, refreshToken, WEEK * 2);

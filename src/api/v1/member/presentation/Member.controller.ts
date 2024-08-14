@@ -1,6 +1,7 @@
 import { ExistingMember, InvalidMember } from "@global/common/error/MemberError";
-import { Body, Controller, Get, HttpCode, HttpStatus, Post } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { CommonGuard } from "@global/jwt/guard/Common.guard";
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { MemberService } from "../application/Member.service";
 import { SignupRequestDto, SignupResponseDto } from "../domain/dto/Signup.dto";
@@ -12,6 +13,8 @@ export class MemberController {
 
     @Get()
     @HttpCode(HttpStatus.OK)
+    @UseGuards(CommonGuard)
+    @ApiBearerAuth("Authorization")
     @ApiResponse({ status: HttpStatus.OK, type: SignupResponseDto, isArray: true })
     @ApiOperation({ summary: "회원 내역 조회" })
     async findAll() {

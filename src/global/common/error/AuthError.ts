@@ -23,3 +23,11 @@ export class InvalidIdOrPassword {
     @ApiProperty({ example: "INVALID_ID_OR_PASSWORD" })
     type = "INVALID_ID_OR_PASSWORD";
 }
+
+export class InvalidRefreshToken {
+    @ApiProperty({ example: "refreshToken이 잘못되었습니다." })
+    message = "refreshToken이 잘못되었습니다.";
+
+    @ApiProperty({ example: "INVALID_REFRESH_TOKEN" })
+    type = "INVALID_REFRESH_TOKEN";
+}
