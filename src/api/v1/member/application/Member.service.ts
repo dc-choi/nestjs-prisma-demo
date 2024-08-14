@@ -1,4 +1,4 @@
-import { Repository } from "@global/dao/Repository";
+import { Repository } from "@infra/dao/Repository";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
