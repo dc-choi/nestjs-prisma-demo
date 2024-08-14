@@ -11,8 +11,11 @@ export class MemberController {
     constructor(private readonly memberService: MemberService) {}
 
     @Get()
-    async getMember() {
-        return await this.memberService.getMember();
+    @HttpCode(HttpStatus.OK)
+    @ApiResponse({ status: HttpStatus.OK, type: SignupResponseDto, isArray: true })
+    @ApiOperation({ summary: "회원 내역 조회" })
+    async findAll() {
+        return await this.memberService.findAll();
     }
 
     @Post()

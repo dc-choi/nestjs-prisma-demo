@@ -4,7 +4,6 @@ import { PaymentModule } from "@api/v1/payment/Payment.module";
 import { SubscribeModule } from "@api/v1/subscribe/Subscribe.module";
 import { TransactionModule } from "@api/v1/transaction/Transaction.module";
 import { winstonTransports } from "@global/logger/Winston.config";
-import { DaoModule } from "@infra/dao/Dao.module";
 import { MailModule } from "@infra/mail/Mail.module";
 import { RedisModule } from "@infra/redis/Redis.module";
 import { Module } from "@nestjs/common";
@@ -12,7 +11,7 @@ import { ConfigModule } from "@nestjs/config";
 
 import Joi from "joi";
 import { WinstonModule } from "nest-winston";
-import { PrismaModule } from "prisma/prisma.module";
+import { DaoModule } from "prisma/dao.module";
 
 @Module({
     imports: [
@@ -31,7 +30,7 @@ import { PrismaModule } from "prisma/prisma.module";
         WinstonModule.forRoot({
             transports: winstonTransports,
         }),
-        PrismaModule,
+        DaoModule,
         AuthModule,
         MemberModule,
         SubscribeModule,
@@ -39,7 +38,6 @@ import { PrismaModule } from "prisma/prisma.module";
         TransactionModule,
         MailModule,
         RedisModule,
-        DaoModule,
     ],
     controllers: [],
 })

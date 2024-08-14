@@ -1,25 +1,24 @@
 import { ExistingMember, InvalidMember } from "@global/common/error";
 import { EnvConfig } from "@global/env/Env.config";
-import { Repository } from "@infra/dao/Repository";
 import { BadRequestException, ConflictException, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
+import { FindAllMemberResponseDto } from "../domain/dto/FindAllMember.dto";
 import { SignupRequestDto, SignupResponseDto } from "../domain/dto/Signup.dto";
 import { IdBlackList } from "../domain/idBlackList";
 
-import { PrismaService } from "prisma/prisma.service";
+import { Repository } from "prisma/repository";
 
 @Injectable()
-export class MemberService extends Repository {
+export class MemberService {
     constructor(
-        protected readonly prisma: PrismaService,
+        private readonly repository: Repository,
         private readonly config: ConfigService<EnvConfig, true>
-    ) {
-        super(prisma);
-    }
+    ) {}
 
-    async getMember() {
-        return await this.memberRepository.findMany();
+    async findAll() {
+        const members = await this.repository.member.findMany();
+        return FindAllMemberResponseDto.toDto(members);
     }
 
     async signup(signupRequestDto: SignupRequestDto): Promise<SignupResponseDto> {
@@ -29,7 +28,7 @@ export class MemberService extends Repository {
 
         if (IdBlackList.includes(name)) throw new BadRequestException(new InvalidMember());
 
-        const findMember = await this.memberRepository.findFirst({
+        const findMember = await this.repository.member.findFirst({
             where: {
                 name,
                 email,
@@ -37,7 +36,7 @@ export class MemberService extends Repository {
         });
         if (findMember) throw new ConflictException(new ExistingMember());
 
-        const newMember = await this.memberRepository.create({
+        const newMember = await this.repository.member.create({
             data: member,
         });
 
