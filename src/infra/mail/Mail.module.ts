@@ -16,8 +16,8 @@ import { CqrsModule } from "@nestjs/cqrs";
                         port: 465,
                         secure: true,
                         auth: {
-                            user: configService.get("MAIL_USER"),
-                            pass: configService.get("MAIL_PASSWORD"),
+                            user: configService.get<string>("MAIL_USER"),
+                            pass: configService.get<string>("MAIL_PASSWORD"),
                         },
                     },
                     defaults: {

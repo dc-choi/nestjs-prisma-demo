@@ -20,7 +20,8 @@ export class AuthService {
     ) {}
 
     async login(loginRequestDto: LoginRequestDto) {
-        const member = LoginRequestDto.toEntity(loginRequestDto, this.config.get("SECRET"));
+        const secret = this.config.get<string>("SECRET");
+        const member = LoginRequestDto.toEntity(loginRequestDto, secret);
         const { email, hashedPassword } = member;
 
         const findMember = await this.repository.member.findFirst({

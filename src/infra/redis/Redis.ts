@@ -9,7 +9,7 @@ export class Redis {
     private readonly redisClient: RedisClientType;
 
     constructor(private readonly configService: ConfigService<EnvConfig, true>) {
-        this.redisClient = createClient({ url: this.configService.get("REDIS_URL") });
+        this.redisClient = createClient({ url: this.configService.get<string>("REDIS_URL") });
         this.redisClient.connect();
     }
 

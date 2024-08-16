@@ -13,7 +13,7 @@ import { JwtStrategy } from "./strategy/JwtStrategy";
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: async (configService: ConfigService<EnvConfig, true>) => ({
-                secret: configService.get("SECRET"),
+                secret: configService.get<string>("SECRET"),
                 signOptions: { expiresIn: "2h" },
             }),
         }),
