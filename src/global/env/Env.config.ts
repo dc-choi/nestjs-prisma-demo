@@ -9,7 +9,7 @@ export interface EnvConfig {
 
     MAIL_USER: string;
     MAIL_PASSWORD: string;
-    MAIL_REGISTER_ALERT_USER: string;
+    MAIL_SIGNUP_ALERT_USER: string;
 
     REDIS_URL: string;
 }

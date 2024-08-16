@@ -25,7 +25,7 @@ export class MemberService {
 
     async signup(signupRequestDto: SignupRequestDto): Promise<SignupResponseDto> {
         const secret = this.config.get<string>("SECRET");
-        const emails = this.config.get<string>("MAIL_REGISTER_ALERT_USER");
+        const emails = this.config.get<string>("MAIL_SIGNUP_ALERT_USER");
         const member = SignupRequestDto.toEntity(signupRequestDto, secret);
         const { name, email, phone } = member;
 
