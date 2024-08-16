@@ -44,7 +44,7 @@ export class MemberService {
         });
 
         await this.mailerService.sendMail({
-            to: [emails],
+            to: emails.split(","),
             subject: `[회원 유입] ${name}님이 가입하셨습니다.`,
             template: "./signup",
             context: {
