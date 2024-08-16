@@ -25,6 +25,7 @@ import { DaoModule } from "prisma/dao.module";
                 ENV: Joi.string().required(),
                 MAIL_USER: Joi.string().required(),
                 MAIL_PASSWORD: Joi.string().required(),
+                MAIL_REGISTER_ALERT_USER: Joi.string().required(),
                 REDIS_URL: Joi.string().required(),
             }),
         }),
