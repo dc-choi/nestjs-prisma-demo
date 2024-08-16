@@ -1,4 +1,6 @@
 export interface EnvConfig {
+    SERVER_PORT: number;
+
     DATABASE_URL: string;
 
     SECRET: string;

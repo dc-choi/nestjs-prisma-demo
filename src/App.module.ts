@@ -20,6 +20,7 @@ import { DaoModule } from "prisma/dao.module";
             isGlobal: true,
             envFilePath: [".env"],
             validationSchema: Joi.object({
+                SERVER_PORT: Joi.number().optional().default(3000),
                 DATABASE_URL: Joi.string().required(),
                 SECRET: Joi.string().required(),
                 ENV: Joi.string().required(),

@@ -33,6 +33,7 @@ const swaggerSetup = (app: INestApplication, prefix: string) => {
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
+    const port = Number(process.env.SERVER_PORT) || 3000;
     const prefix = "api";
 
     app.useGlobalInterceptors(new HttpLoggingInterceptor());
@@ -50,6 +51,6 @@ async function bootstrap() {
 
     swaggerSetup(app, prefix);
 
-    await app.listen(3000);
+    await app.listen(port);
 }
 bootstrap();
