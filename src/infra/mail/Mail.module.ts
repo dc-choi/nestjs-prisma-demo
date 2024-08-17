@@ -5,6 +5,8 @@ import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { CqrsModule } from "@nestjs/cqrs";
 
+import { SendSignupAlertHandler } from "./handler/Signup.handler";
+
 @Module({
     imports: [
         MailerModule.forRootAsync({
@@ -35,5 +37,6 @@ import { CqrsModule } from "@nestjs/cqrs";
         }),
         CqrsModule,
     ],
+    providers: [SendSignupAlertHandler],
 })
 export class MailModule {}

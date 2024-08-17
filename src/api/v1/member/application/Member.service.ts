@@ -1,12 +1,13 @@
 import { ExistingMember, InvalidMember } from "@global/common/error/MemberError";
 import { EnvConfig } from "@global/env/Env.config";
-import { MailerService } from "@nestjs-modules/mailer";
 import { BadRequestException, ConflictException, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { EventBus } from "@nestjs/cqrs";
 
 import { FindAllMemberResponseDto } from "../domain/dto/FindAllMember.dto";
 import { SignupRequestDto, SignupResponseDto } from "../domain/dto/Signup.dto";
 import { IdBlackList } from "../domain/idBlackList";
+import { SignupEvent } from "./event/Signup.event";
 
 import { Repository } from "prisma/repository";
 
@@ -15,7 +16,7 @@ export class MemberService {
     constructor(
         private readonly repository: Repository,
         private readonly config: ConfigService<EnvConfig, true>,
-        private readonly mailerService: MailerService
+        private readonly eventBus: EventBus
     ) {}
 
     async findAll() {
@@ -43,16 +44,7 @@ export class MemberService {
             data: member,
         });
 
-        await this.mailerService.sendMail({
-            to: emails.split(","),
-            subject: `[회원 유입] ${name}님이 가입하셨습니다.`,
-            template: "./signup",
-            context: {
-                name,
-                email,
-                phone,
-            },
-        });
+        this.eventBus.publish(new SignupEvent(email, name, phone, emails));
 
         return SignupResponseDto.toDto(newMember);
     }
