@@ -164,6 +164,8 @@ model Transaction {
 
   payment   Payment @relation(fields: [paymentId], references: [id], map: "FK_transaction_payment")
   paymentId BigInt  @map("payment_id")
+
+  @@map("transactions")
 }
 
 enum TransactionType {
