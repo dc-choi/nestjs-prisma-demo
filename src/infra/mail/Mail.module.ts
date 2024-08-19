@@ -5,7 +5,7 @@ import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { CqrsModule } from "@nestjs/cqrs";
 
-import { SendSignupAlertHandler } from "./handler/Signup.handler";
+import { SendSignupAlertHandler } from "./handler/SendSignupAlert.handler";
 
 @Module({
     imports: [
