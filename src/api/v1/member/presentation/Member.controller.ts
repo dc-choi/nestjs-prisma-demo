@@ -11,16 +11,6 @@ import { SignupRequestDto, SignupResponseDto } from "../domain/dto/Signup.dto";
 export class MemberController {
     constructor(private readonly memberService: MemberService) {}
 
-    @Get()
-    @HttpCode(HttpStatus.OK)
-    @UseGuards(CommonGuard)
-    @ApiBearerAuth("Authorization")
-    @ApiResponse({ status: HttpStatus.OK, type: SignupResponseDto, isArray: true })
-    @ApiOperation({ summary: "회원 내역 조회" })
-    async findAll() {
-        return await this.memberService.findAll();
-    }
-
     @Post()
     @HttpCode(HttpStatus.CREATED)
     @ApiOperation({ summary: "회원가입" })
@@ -29,5 +19,15 @@ export class MemberController {
     @ApiResponse({ status: HttpStatus.CONFLICT, type: ExistingMember })
     async signup(@Body() signupRequestDto: SignupRequestDto) {
         return await this.memberService.signup(signupRequestDto);
+    }
+
+    @Get()
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(CommonGuard)
+    @ApiBearerAuth("Authorization")
+    @ApiResponse({ status: HttpStatus.OK, type: SignupResponseDto, isArray: true })
+    @ApiOperation({ summary: "회원 내역 조회" })
+    async findAll() {
+        return await this.memberService.findAll();
     }
 }
