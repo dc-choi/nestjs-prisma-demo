@@ -1,8 +1,10 @@
-import { InvalidRefreshToken } from "@global/common/error/AuthError";
+import { InvalidRefreshToken, NotExpiredAccessToken } from "@global/common/error/AuthError";
 import { WEEK } from "@global/common/utils/time";
 import { Redis } from "@infra/redis/Redis";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
+
+import { JwtPayload } from "./payload/JwtPayload";
 
 import { v4 as uuid } from "uuid";
 
@@ -29,13 +31,13 @@ export class TokenProvider {
     }
 
     /**
-     * refreshToken 검증
+     * accessToken, refreshToken 검증
      */
-    public async velifyRefreshToken(memberId: bigint, refreshToken: string) {
-        const redisToken = await this.redis.get(`token:${memberId}`);
-        if (redisToken !== refreshToken) throw new UnauthorizedException(new InvalidRefreshToken());
+    public async velifyToken(accessToken: string, refreshToken: string) {
+        const { memberId, role } = await this.velifyAccessToken(accessToken);
+        const redisToken = await this.verifyRefreshToken(memberId, refreshToken);
 
-        return redisToken;
+        return { memberId, role, redisToken };
     }
 
     /**
@@ -63,5 +65,36 @@ export class TokenProvider {
         await this.redis.set(`token:${memberId}`, refreshToken, WEEK * 2);
 
         return refreshToken;
+    }
+
+    /**
+     * accessToken 검증
+     */
+    private async velifyAccessToken(accessToken: string) {
+        let memberId: bigint = BigInt(0);
+        let role: string = "";
+        let isNotExpired = true;
+
+        await this.jwtService.verifyAsync<JwtPayload>(accessToken).catch(() => {
+            const { memberId: parsedMemberId, role: parsedRole } = this.jwtService.decode<JwtPayload>(accessToken);
+            memberId = parsedMemberId;
+            role = parsedRole;
+            isNotExpired = false;
+        });
+
+        if (isNotExpired) throw new UnauthorizedException(new NotExpiredAccessToken());
+
+        return { memberId, role };
+    }
+
+    /**
+     * refreshToken 검증
+     */
+    private async verifyRefreshToken(memberId: bigint, refreshToken: string) {
+        const redisToken = await this.redis.get(`token:${memberId}`);
+
+        if (redisToken !== refreshToken) throw new UnauthorizedException(new InvalidRefreshToken());
+
+        return redisToken;
     }
 }

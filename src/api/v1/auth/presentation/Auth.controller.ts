@@ -1,7 +1,7 @@
-import { InvalidIdOrPassword, InvalidRefreshToken } from "@global/common/error/AuthError";
+import { InvalidIdOrPassword, InvalidRefreshToken, NotExpiredAccessToken } from "@global/common/error/AuthError";
 import { NotExistingMember } from "@global/common/error/MemberError";
 import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiExtraModels, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from "@nestjs/swagger";
 
 import { AuthService } from "../application/Auth.service";
 import { AuthTokenRequestDto, AuthTokenResponseDto } from "../domain/dto/AuthToken.dto";
@@ -24,9 +24,15 @@ export class AuthController {
     @Post("token")
     @HttpCode(HttpStatus.OK)
     @ApiOperation({ summary: "토큰 재발급" })
+    @ApiExtraModels(NotExpiredAccessToken, InvalidRefreshToken)
     @ApiResponse({ status: HttpStatus.OK, type: AuthTokenResponseDto })
     @ApiResponse({ status: HttpStatus.BAD_REQUEST, type: NotExistingMember })
-    @ApiResponse({ status: HttpStatus.UNAUTHORIZED, type: InvalidRefreshToken })
+    @ApiResponse({
+        status: HttpStatus.UNAUTHORIZED,
+        schema: {
+            oneOf: [{ $ref: getSchemaPath(NotExpiredAccessToken) }, { $ref: getSchemaPath(InvalidRefreshToken) }],
+        },
+    })
     async token(@Body() authTokenRequstdto: AuthTokenRequestDto): Promise<AuthTokenResponseDto> {
         return await this.authService.token(authTokenRequstdto);
     }

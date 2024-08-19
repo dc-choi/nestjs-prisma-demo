@@ -56,21 +56,23 @@ export class AuthService {
     }
 
     async token(authTokenRequstdto: AuthTokenRequestDto) {
-        const { memberId, refreshToken } = authTokenRequstdto;
+        const { accessToken, refreshToken } = authTokenRequstdto;
 
+        const { memberId, role } = await this.tokenProvider.velifyToken(accessToken, refreshToken);
         const findMember = await this.repository.member.findFirst({
             where: {
                 id: memberId,
             },
         });
         if (!findMember) throw new UnauthorizedException(new NotExistingMember());
-        await this.tokenProvider.velifyRefreshToken(memberId, refreshToken);
 
-        const { role } = findMember;
-        const { accessToken, refreshToken: newRefreshToken } = await this.tokenProvider.generateToken(memberId, role);
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = await this.tokenProvider.generateToken(
+            memberId,
+            role
+        );
 
         return AuthTokenResponseDto.toDto({
-            accessToken,
+            accessToken: newAccessToken,
             refreshToken: newRefreshToken,
         });
     }

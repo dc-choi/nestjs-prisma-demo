@@ -1,13 +1,17 @@
 import { emptyValue, invalidValue } from "@global/common/message/ErrorMessage";
 import { ApiProperty } from "@nestjs/swagger";
 
-import { IsNotEmpty, IsNumber, IsString, IsUUID } from "class-validator";
+import { IsNotEmpty, IsString, IsUUID } from "class-validator";
 
 export class AuthTokenRequestDto {
-    @ApiProperty({ description: "회원 ID", example: 1 })
-    @IsNotEmpty({ message: emptyValue("회원 ID") })
-    @IsNumber({}, { message: invalidValue("회원 ID") })
-    memberId: bigint;
+    @ApiProperty({
+        description: "accessToken",
+        example:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZW1iZXJJZCI6IjciLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcyNDA3MzI1MSwiZXhwIjoxNzI0MDgwNDUxfQ.33KgiWxeKml1O75L2QxmqFANjxcZRZm3HgHEHLmAIgE",
+    })
+    @IsString({ message: invalidValue("accessToken") })
+    @IsNotEmpty({ message: emptyValue("accessToken") })
+    accessToken: string;
 
     @ApiProperty({ description: "refreshToken", example: "f7b3b3b3-4b3b-4b3b-4b3b-4b3b4b3b4b3b" })
     @IsString({ message: invalidValue("refreshToken") })
