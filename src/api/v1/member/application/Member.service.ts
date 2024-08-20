@@ -6,6 +6,7 @@ import { EventBus } from "@nestjs/cqrs";
 
 import { FindAllMemberResponseDto } from "../domain/dto/FindAllMember.dto";
 import { SignupRequestDto, SignupResponseDto } from "../domain/dto/Signup.dto";
+import { MemberEntity } from "../domain/entity/Member.entity";
 import { IdBlackList } from "../domain/idBlackList";
 import { SignupEvent } from "./event/Signup.event";
 
@@ -20,11 +21,12 @@ export class MemberService {
     ) {}
 
     async findAll() {
-        const members = await this.repository.member.findMany();
+        const members = (await this.repository.member.findMany()) as MemberEntity[];
+
         return FindAllMemberResponseDto.toDto(members);
     }
 
-    async signup(signupRequestDto: SignupRequestDto): Promise<SignupResponseDto> {
+    async signup(signupRequestDto: SignupRequestDto) {
         const secret = this.config.get<string>("SECRET");
         const emails = this.config.get<string>("MAIL_SIGNUP_ALERT_USER");
         const member = SignupRequestDto.toEntity(signupRequestDto, secret);
@@ -32,17 +34,17 @@ export class MemberService {
 
         if (IdBlackList.includes(name)) throw new BadRequestException(new InvalidMember());
 
-        const findMember = await this.repository.member.findFirst({
+        const findMember = (await this.repository.member.findFirst({
             where: {
                 name,
                 email,
             },
-        });
+        })) as MemberEntity;
         if (findMember) throw new ConflictException(new ExistingMember());
 
-        const newMember = await this.repository.member.create({
+        const newMember = (await this.repository.member.create({
             data: member,
-        });
+        })) as MemberEntity;
 
         this.eventBus.publish(new SignupEvent(email, name, phone, emails));
 

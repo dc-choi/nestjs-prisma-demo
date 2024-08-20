@@ -1,3 +1,4 @@
+import { MemberEntity } from "@api/v1/member/domain/entity/Member.entity";
 import { InvalidIdOrPassword } from "@global/common/error/AuthError";
 import { NotExistingMember } from "@global/common/error/MemberError";
 import { EnvConfig } from "@global/env/Env.config";
@@ -24,19 +25,18 @@ export class AuthService {
         const member = LoginRequestDto.toEntity(loginRequestDto, secret);
         const { email, hashedPassword } = member;
 
-        const findMember = await this.repository.member.findFirst({
+        const findMember = (await this.repository.member.findFirst({
             where: {
                 email,
                 hashedPassword,
             },
-        });
+        })) as MemberEntity;
         if (!findMember) throw new UnauthorizedException(new InvalidIdOrPassword());
 
-        const { id, role } = findMember;
-        const { accessToken, refreshToken } = await this.tokenProvider.generateToken(id, role);
+        const { id, role, lastLoginAt } = findMember;
+        const isFirstLogin = lastLoginAt ? false : true;
 
-        let isFirstLogin = false;
-        if (!findMember.lastLoginAt) isFirstLogin = true;
+        const { accessToken, refreshToken } = await this.tokenProvider.generateToken(id, role);
 
         await this.repository.member.update({
             data: {
@@ -59,11 +59,11 @@ export class AuthService {
         const { accessToken, refreshToken } = authTokenRequstdto;
 
         const { memberId, role } = await this.tokenProvider.velifyToken(accessToken, refreshToken);
-        const findMember = await this.repository.member.findFirst({
+        const findMember = (await this.repository.member.findFirst({
             where: {
                 id: memberId,
             },
-        });
+        })) as MemberEntity;
         if (!findMember) throw new UnauthorizedException(new NotExistingMember());
 
         const { accessToken: newAccessToken, refreshToken: newRefreshToken } = await this.tokenProvider.generateToken(

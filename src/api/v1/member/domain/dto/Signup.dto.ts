@@ -75,7 +75,7 @@ export class SignupResponseDto {
     @ApiProperty({ description: "권한", enum: MemberRole, example: MemberRole.USER })
     role: MemberRole;
 
-    constructor(data?: ISignupProps) {
+    constructor(data?: MemberEntity) {
         if (data) {
             this.name = data?.name;
             this.email = data?.email;
@@ -84,14 +84,7 @@ export class SignupResponseDto {
         }
     }
 
-    public static toDto(data: ISignupProps) {
+    public static toDto(data: MemberEntity) {
         return new SignupResponseDto(data);
     }
-}
-
-interface ISignupProps {
-    name: string;
-    email: string;
-    phone: string;
-    role: MemberRole;
 }

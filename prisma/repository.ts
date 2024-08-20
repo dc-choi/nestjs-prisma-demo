@@ -1,30 +1,32 @@
+import { MemberEntity } from "@api/v1/member/domain/entity/Member.entity";
 import { sqlLogger } from "@global/logger/Winston.config";
 import { INestApplication, Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
-/**
- * #### INFO: 다음 방법으로도 가능
- *
- * - 1번 방법 (타입 안정성은 더 좋지만 코드가 길어짐)
- * ```typescript
- * const newMember = new MemberEntity();
- * const memberData = await this.memberRepository.create({
- *   data: member,
- * })
- * Object.assign(newMember, memberData);
- * ```
- * - 2번 방법 (코드가 간결하지만 타입 안정성이 떨어짐)
- * ```typescript
- * const newMember = (await this.memberRepository.create({
- *   data: member,
- * })) as MemberEntity;
- * ```
- */
 @Injectable()
 export class Repository extends PrismaClient implements OnModuleInit, OnModuleDestroy {
     constructor() {
         super({
             log: [{ emit: "event", level: "query" }],
+            transactionOptions: {
+                timeout: 5000,
+                maxWait: 10000,
+            },
+        });
+
+        /**
+         * TODO: $extends로 변경이 필요함.
+         * 적용 시도를 하였으나 에러가 발생하여 일단은 $use로 대체함.
+         */
+        this.$use(async (params, next) => {
+            const result = await next(params);
+            switch (params.model) {
+                case Prisma.ModelName.Member:
+                    const member = new MemberEntity(result);
+                    return member;
+                default:
+                    break;
+            }
         });
     }
 

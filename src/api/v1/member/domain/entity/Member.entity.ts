@@ -18,6 +18,11 @@ export class MemberEntity extends BaseTimeEntity implements Member {
 
     lastLoginAt: Date | null;
 
+    constructor(...args: any[]) {
+        super();
+        Object.assign(this, args[0]);
+    }
+
     public generateHashedPassword(password: string, salt: string) {
         this.hashedPassword = createHmac("sha256", salt).update(password).digest("base64");
     }

@@ -21,12 +21,8 @@ export class LoginRequestDto {
     password: string;
 
     public static toEntity(data: LoginRequestDto, secret: string) {
-        const member = new MemberEntity();
-
-        if (data) {
-            member.email = data?.email;
-            member.generateHashedPassword(data?.password, secret);
-        }
+        const member = new MemberEntity({ ...data });
+        member.generateHashedPassword(data?.password, secret);
 
         return member;
     }
