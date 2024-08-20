@@ -22,7 +22,11 @@ export class Repository extends PrismaClient implements OnModuleInit, OnModuleDe
             const result = await next(params);
             switch (params.model) {
                 case Prisma.ModelName.Member:
-                    const member = new MemberEntity(result);
+                    const member = Array.isArray(result)
+                        ? result.map((param) => {
+                              return new MemberEntity(param);
+                          })
+                        : new MemberEntity(result);
                     return member;
                 default:
                     break;

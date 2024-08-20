@@ -13,7 +13,7 @@ import { JwtStrategy } from "./strategy/JwtStrategy";
             inject: [ConfigService],
             useFactory: async (configService: ConfigService<EnvConfig, true>) => ({
                 secret: configService.get<string>("SECRET"),
-                signOptions: { expiresIn: "1m" },
+                signOptions: { expiresIn: "2h" },
             }),
         }),
         RedisModule,

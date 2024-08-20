@@ -40,7 +40,7 @@ export class MemberService {
                 email,
             },
         })) as MemberEntity;
-        if (findMember) throw new ConflictException(new ExistingMember());
+        if (findMember.id) throw new ConflictException(new ExistingMember());
 
         const newMember = (await this.repository.member.create({
             data: member,
