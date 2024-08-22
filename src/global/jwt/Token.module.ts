@@ -1,4 +1,4 @@
-import { EnvConfig } from "@global/env/Env.config";
+import { EnvConfig } from "@global/config/env/Env.config";
 import { RedisModule } from "@infra/redis/Redis.module";
 import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";

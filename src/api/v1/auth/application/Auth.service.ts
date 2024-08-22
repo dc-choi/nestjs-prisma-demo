@@ -1,7 +1,7 @@
 import { MemberEntity } from "@api/v1/member/domain/entity/Member.entity";
 import { InvalidIdOrPassword } from "@global/common/error/AuthError";
 import { NotExistingMember } from "@global/common/error/MemberError";
-import { EnvConfig } from "@global/env/Env.config";
+import { EnvConfig } from "@global/config/env/Env.config";
 import { TokenProvider } from "@global/jwt/TokenProvider";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
