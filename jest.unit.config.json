@@ -1,13 +1,11 @@
 {
     "moduleFileExtensions": ["js", "json", "ts"],
     "rootDir": "./",
-    "testRegex": ".*\\.test\\.ts$",
+    "testRegex": ".*\\.unit\\.ts$",
+    "testEnvironment": "node",
     "transform": {
         "^.+\\.(t|j)s$": "ts-jest"
     },
-    "collectCoverageFrom": ["**/src/**/*.(t|j)s"],
-    "coverageDirectory": "./coverage",
-    "testEnvironment": "node",
     "moduleNameMapper": {
         "^@api/(.*)$": "<rootDir>/src/api/$1",
         "^@global/(.*)$": "<rootDir>/src/global/$1",
