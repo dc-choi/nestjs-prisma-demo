@@ -1,5 +1,5 @@
 import { MemberEntity } from "@api/v1/member/domain/entity/Member.entity";
-import { sqlLogger } from "@global/logger/Winston.config";
+import { sqlLogger } from "@global/config/logger/Winston.config";
 import { INestApplication, Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { Prisma, PrismaClient } from "@prisma/client";
 
