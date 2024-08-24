@@ -1,5 +1,5 @@
 import { BaseTimeEntity } from "@global/common/entity/BaseTime.entity";
-import { Member, MemberRole } from "@prisma/client";
+import { Member, MemberRole, Payment, Subscribe, SubscribeDetail, Transaction } from "@prisma/client";
 
 import { createHmac } from "crypto";
 
@@ -17,6 +17,14 @@ export class MemberEntity extends BaseTimeEntity implements Member {
     role: MemberRole;
 
     lastLoginAt: Date | null;
+
+    Subscribe: Subscribe[] | null;
+
+    SubscribeDetail: SubscribeDetail[] | null;
+
+    Payment: Payment[] | null;
+
+    Transaction: Transaction[] | null;
 
     constructor(...args: any[]) {
         super();

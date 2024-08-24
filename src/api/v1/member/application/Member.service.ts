@@ -30,7 +30,7 @@ export class MemberService {
         const secret = this.config.get<string>("SECRET");
         const emails = this.config.get<string>("MAIL_SIGNUP_ALERT_USER");
         const member = SignupRequestDto.toEntity(signupRequestDto, secret);
-        const { name, email, phone } = member;
+        const { name, email, phone, role, hashedPassword } = member;
 
         if (IdBlackList.includes(name)) throw new BadRequestException(new InvalidMember());
 
@@ -39,11 +39,23 @@ export class MemberService {
                 name,
                 email,
             },
+            // include: {
+            //     Subscribe: true,
+            //     SubscribeDetail: true,
+            //     Payment: true,
+            //     Transaction: true,
+            // },
         })) as MemberEntity;
         if (findMember.id) throw new ConflictException(new ExistingMember());
 
         const newMember = (await this.repository.member.create({
-            data: member,
+            data: {
+                name,
+                email,
+                hashedPassword,
+                phone,
+                role,
+            },
         })) as MemberEntity;
 
         this.eventBus.publish(new SignupEvent(email, name, phone, emails));
