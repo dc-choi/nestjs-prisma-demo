@@ -33,7 +33,7 @@ export class AuthController {
             oneOf: [{ $ref: getSchemaPath(NotExpiredAccessToken) }, { $ref: getSchemaPath(InvalidRefreshToken) }],
         },
     })
-    async token(@Body() authTokenRequstdto: AuthTokenRequestDto): Promise<AuthTokenResponseDto> {
-        return await this.authService.token(authTokenRequstdto);
+    async token(@Body() authTokenRequestDto: AuthTokenRequestDto): Promise<AuthTokenResponseDto> {
+        return await this.authService.token(authTokenRequestDto);
     }
 }

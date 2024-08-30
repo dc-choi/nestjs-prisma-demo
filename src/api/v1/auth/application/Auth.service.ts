@@ -55,8 +55,8 @@ export class AuthService {
         });
     }
 
-    async token(authTokenRequstdto: AuthTokenRequestDto) {
-        const { accessToken, refreshToken } = authTokenRequstdto;
+    async token(authTokenRequestDto: AuthTokenRequestDto) {
+        const { accessToken, refreshToken } = authTokenRequestDto;
 
         const { memberId, role } = await this.tokenProvider.velifyToken(accessToken, refreshToken);
         const findMember = (await this.repository.member.findFirst({

@@ -1,0 +1,17 @@
+### login
+POST localhost:3000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "ddagae0805@gmail.com",
+  "password": "ddagae0805"
+}
+
+### token
+POST localhost:3000/api/v1/auth/token
+Content-Type: application/json
+
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZW1iZXJJZCI6IjciLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcyNDA3NjUyOCwiZXhwIjoxNzI0MDc2NTg4fQ.iTC29RSP0swoWyVaui49Snv4Pqe1WJpA-hL_IUYIrL8",
+  "refreshToken": "79ec2660-0ed4-47e5-862e-9d1076b5ef4b"
+}
