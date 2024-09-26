@@ -7,9 +7,7 @@ import {
 } from "@global/common/utils/MaxLength";
 import { EMAIL_REGEXP, NAME_REGEXP, PASSWORD_REGEXP, PHONE_REGEXP } from "@global/common/utils/RegExpPattern";
 import { ApiProperty } from "@nestjs/swagger";
-import { MemberRole } from "@prisma/client";
-
-import { MemberEntity } from "../entity/Member.entity";
+import { Member, MemberRole } from "@prisma/client";
 
 import { IsEnum, IsNotEmpty, IsString, Matches, MaxLength } from "class-validator";
 
@@ -46,20 +44,6 @@ export class SignupRequestDto {
     @IsEnum(MemberRole, { message: invalidValue("권한") })
     @IsNotEmpty({ message: emptyValue("권한") })
     role: MemberRole;
-
-    public static toEntity(data: SignupRequestDto, secret: string) {
-        const member = new MemberEntity();
-
-        if (data) {
-            member.name = data?.name;
-            member.email = data?.email;
-            member.phone = data?.phone;
-            member.role = data?.role;
-            member.generateHashedPassword(data?.password, secret);
-        }
-
-        return member;
-    }
 }
 
 export class SignupResponseDto {
@@ -75,16 +59,16 @@ export class SignupResponseDto {
     @ApiProperty({ description: "권한", enum: MemberRole, example: MemberRole.USER })
     role: MemberRole;
 
-    constructor(data?: MemberEntity) {
-        if (data) {
-            this.name = data?.name;
-            this.email = data?.email;
-            this.phone = data?.phone;
-            this.role = data?.role;
+    constructor(member?: Member) {
+        if (member) {
+            this.name = member?.name;
+            this.email = member?.email;
+            this.phone = member?.phone;
+            this.role = member?.role;
         }
     }
 
-    public static toDto(data: MemberEntity) {
+    public static toDto(data: Member) {
         return new SignupResponseDto(data);
     }
 }

@@ -33,8 +33,8 @@ export class TokenProvider {
     /**
      * accessToken, refreshToken 검증
      */
-    public async velifyToken(accessToken: string, refreshToken: string) {
-        const { memberId, role } = await this.velifyAccessToken(accessToken);
+    public async verifyToken(accessToken: string, refreshToken: string) {
+        const { memberId, role } = await this.verifyAccessToken(accessToken);
         const redisToken = await this.verifyRefreshToken(memberId, refreshToken);
 
         return { memberId, role, redisToken };
@@ -44,12 +44,10 @@ export class TokenProvider {
      * accessToken 발급
      */
     private async generateAccessToken(memberId: bigint, role: string) {
-        const accessToken = this.jwtService.sign({
+        return this.jwtService.sign({
             memberId,
             role,
         });
-
-        return accessToken;
     }
 
     /**
@@ -57,7 +55,7 @@ export class TokenProvider {
      */
     private async generateRefreshToken(memberId: bigint) {
         let refreshToken = await this.redis.get(`token:${memberId}`);
-        if (refreshToken) this.redis.del(`token:${memberId}`);
+        if (refreshToken) await this.redis.del(`token:${memberId}`);
 
         refreshToken = uuid();
 
@@ -70,7 +68,7 @@ export class TokenProvider {
     /**
      * accessToken 검증
      */
-    private async velifyAccessToken(accessToken: string) {
+    private async verifyAccessToken(accessToken: string) {
         let memberId: bigint = BigInt(0);
         let role: string = "";
         let isNotExpired = true;

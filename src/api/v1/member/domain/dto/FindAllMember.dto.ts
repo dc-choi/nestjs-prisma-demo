@@ -1,7 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { MemberRole } from "@prisma/client";
-
-import { MemberEntity } from "../entity/Member.entity";
+import { Member, MemberRole } from "@prisma/client";
 
 export class FindAllMemberResponseDto {
     @ApiProperty({ description: "회원 ID", example: 1 })
@@ -25,7 +23,7 @@ export class FindAllMemberResponseDto {
     @ApiProperty({ description: "회원 가입 시간", example: "2021-09-01T00:00:00" })
     createdAt: Date;
 
-    constructor(data?: MemberEntity) {
+    constructor(data?: Member) {
         if (data) {
             this.id = data?.id;
             this.name = data?.name;
@@ -37,7 +35,7 @@ export class FindAllMemberResponseDto {
         }
     }
 
-    public static toDto(data: MemberEntity[]) {
+    public static toDto(data: Member[]) {
         return data.map((item) => new FindAllMemberResponseDto(item));
     }
 }

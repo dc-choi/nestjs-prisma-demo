@@ -23,13 +23,13 @@ model Member {
   updatedAt      DateTime   @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
   deletedAt      DateTime?  @map("deleted_at") @db.DateTime(0)
 
-  Subscribe Subscribe[]
+  subscribe Subscribe[]
 
-  SubscribeDetail SubscribeDetail[]
+  subscribeDetail SubscribeDetail[]
 
-  Payment Payment[]
+  payment Payment[]
 
-  Transaction Transaction[]
+  transaction Transaction[]
 
   @@map("members")
 }
@@ -58,9 +58,9 @@ model Subscribe {
   member   Member @relation(fields: [memberId], references: [id], map: "FK_subscribe_member")
   memberId BigInt @map("member_id")
 
-  SubscribeDetail SubscribeDetail[]
+  subscribeDetail SubscribeDetail[]
 
-  Payment Payment[]
+  payment Payment[]
 
   @@map("subscribes")
 }
@@ -134,7 +134,7 @@ model Payment {
   subscribe   Subscribe @relation(fields: [subscribeId], references: [id], map: "FK_payment_subscribe")
   subscribeId BigInt    @map("subscribe_id")
 
-  Transaction Transaction[]
+  transaction Transaction[]
 
   @@map("payments")
 }

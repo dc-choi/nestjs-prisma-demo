@@ -1,3 +1,4 @@
+import { FindAllMemberResponseDto } from "@api/v1/member/domain/dto/FindAllMember.dto";
 import { ExistingMember, InvalidMember } from "@global/common/error/MemberError";
 import { CommonGuard } from "@global/jwt/guard/Common.guard";
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from "@nestjs/common";
@@ -6,7 +7,7 @@ import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagg
 import { MemberService } from "../application/Member.service";
 import { SignupRequestDto, SignupResponseDto } from "../domain/dto/Signup.dto";
 
-@ApiTags("Member API's")
+@ApiTags("Member APIs")
 @Controller("v1/members")
 export class MemberController {
     constructor(private readonly memberService: MemberService) {}
@@ -25,7 +26,7 @@ export class MemberController {
     @HttpCode(HttpStatus.OK)
     @UseGuards(CommonGuard)
     @ApiBearerAuth("Authorization")
-    @ApiResponse({ status: HttpStatus.OK, type: SignupResponseDto, isArray: true })
+    @ApiResponse({ status: HttpStatus.OK, type: FindAllMemberResponseDto, isArray: true })
     @ApiOperation({ summary: "회원 내역 조회" })
     async findAll() {
         return await this.memberService.findAll();

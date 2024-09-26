@@ -1,4 +1,3 @@
-import { MemberEntity } from "@api/v1/member/domain/entity/Member.entity";
 import { emptyValue, invalidMax, invalidValue } from "@global/common/message/ErrorMessage";
 import { EMAIL_MAX_LENGTH } from "@global/common/utils/MaxLength";
 import { EMAIL_REGEXP } from "@global/common/utils/RegExpPattern";
@@ -19,13 +18,6 @@ export class LoginRequestDto {
     @IsNotEmpty({ message: emptyValue("비밀번호") })
     @IsString({ message: invalidValue("비밀번호") })
     password: string;
-
-    public static toEntity(data: LoginRequestDto, secret: string) {
-        const member = new MemberEntity({ ...data });
-        member.generateHashedPassword(data?.password, secret);
-
-        return member;
-    }
 }
 
 export class LoginResponseDto {

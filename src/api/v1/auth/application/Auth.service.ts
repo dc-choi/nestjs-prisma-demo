@@ -1,4 +1,4 @@
-import { MemberEntity } from "@api/v1/member/domain/entity/Member.entity";
+import { MemberDomain } from "@api/v1/member/domain/Member.domain";
 import { InvalidIdOrPassword } from "@global/common/error/AuthError";
 import { NotExistingMember } from "@global/common/error/MemberError";
 import { EnvConfig } from "@global/config/env/Env.config";
@@ -21,20 +21,19 @@ export class AuthService {
     ) {}
 
     async login(loginRequestDto: LoginRequestDto) {
-        const secret = this.config.get<string>("SECRET");
-        const member = LoginRequestDto.toEntity(loginRequestDto, secret);
-        const { email, hashedPassword } = member;
+        const salt = this.config.get<string>("SECRET");
+        const { email, password } = loginRequestDto;
 
-        const findMember = (await this.repository.member.findFirst({
+        const findMember = await this.repository.member.findFirst({
             where: {
                 email,
-                hashedPassword,
+                hashedPassword: MemberDomain.generateHashedPassword(password, salt),
             },
-        })) as MemberEntity;
+        });
         if (!findMember) throw new UnauthorizedException(new InvalidIdOrPassword());
 
         const { id, role, lastLoginAt } = findMember;
-        const isFirstLogin = lastLoginAt ? false : true;
+        const isFirstLogin = !lastLoginAt;
 
         const { accessToken, refreshToken } = await this.tokenProvider.generateToken(id, role);
 
@@ -58,12 +57,12 @@ export class AuthService {
     async token(authTokenRequestDto: AuthTokenRequestDto) {
         const { accessToken, refreshToken } = authTokenRequestDto;
 
-        const { memberId, role } = await this.tokenProvider.velifyToken(accessToken, refreshToken);
-        const findMember = (await this.repository.member.findFirst({
+        const { memberId, role } = await this.tokenProvider.verifyToken(accessToken, refreshToken);
+        const findMember = await this.repository.member.findFirst({
             where: {
                 id: memberId,
             },
-        })) as MemberEntity;
+        });
         if (!findMember) throw new UnauthorizedException(new NotExistingMember());
 
         const { accessToken: newAccessToken, refreshToken: newRefreshToken } = await this.tokenProvider.generateToken(

@@ -1,7 +1,6 @@
-import { MemberEntity } from "@api/v1/member/domain/entity/Member.entity";
 import { sqlLogger } from "@global/config/logger/Winston.config";
 import { INestApplication, Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 @Injectable()
 export class Repository extends PrismaClient implements OnModuleInit, OnModuleDestroy {
@@ -15,23 +14,24 @@ export class Repository extends PrismaClient implements OnModuleInit, OnModuleDe
         });
 
         /**
-         * TODO: $extends로 변경이 필요함.
          * 적용 시도를 하였으나 에러가 발생하여 일단은 $use로 대체함.
+         *
+         * 도메인 모델 패턴을 사용하지 않고 개발...
          */
-        this.$use(async (params, next) => {
-            const result = await next(params);
-            switch (params.model) {
-                case Prisma.ModelName.Member:
-                    const member = Array.isArray(result)
-                        ? result.map((param) => {
-                              return new MemberEntity(param);
-                          })
-                        : new MemberEntity(result);
-                    return member;
-                default:
-                    break;
-            }
-        });
+        // this.$use(async (params, next) => {
+        //     const result = await next(params);
+        //     switch (params.model) {
+        //         case Prisma.ModelName.Member:
+        //             const member = Array.isArray(result)
+        //                 ? result.map((param) => {
+        //                       return new MemberEntity(param);
+        //                   })
+        //                 : new MemberEntity(result);
+        //             return member;
+        //         default:
+        //             break;
+        //     }
+        // });
     }
 
     async onModuleInit() {
