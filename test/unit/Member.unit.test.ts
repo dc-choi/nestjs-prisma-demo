@@ -1,7 +1,7 @@
 import { MemberDomain } from "@api/v1/member/domain/Member.domain";
 
 describe("Member Unit Test", () => {
-    describe("member.generateHashedPassword", () => {
+    describe("MemberDomain.generateHashedPassword", () => {
         it("normal case", () => {
             const newPassword = MemberDomain.generateHashedPassword("password", String(process.env.SECRET));
             expect(newPassword).toBeTruthy();
