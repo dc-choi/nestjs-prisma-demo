@@ -7,6 +7,7 @@ import { winstonTransports } from "@global/config/logger/Winston.config";
 import { TokenModule } from "@global/jwt/Token.module";
 import { MailModule } from "@infra/mail/Mail.module";
 import { RedisModule } from "@infra/redis/Redis.module";
+import { TossModule } from "@infra/toss/toss.module";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 
@@ -42,6 +43,7 @@ import { DaoModule } from "prisma/dao.module";
         MailModule,
         RedisModule,
         TokenModule,
+        TossModule,
     ],
     controllers: [],
 })

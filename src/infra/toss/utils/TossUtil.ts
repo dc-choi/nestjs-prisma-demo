@@ -3,15 +3,15 @@ import { BadRequestException } from "@nestjs/common";
 
 import { TossCardCode, TossCardName } from "./TossCode";
 
-export class PaymentMethod {
-    public static vaildCardCode(code: TossCardCode) {
-        if (!Object.values(TossCardCode).includes(code)) {
+export class TossUtil {
+    public static validCardCode(code: string) {
+        if (!(code in TossCardCode)) {
             throw new BadRequestException(invalidValue("토스 지정 카드코드"));
         }
     }
 
-    public static vaildCardName(name: TossCardName) {
-        if (!Object.values(TossCardName).includes(name)) {
+    public static validCardName(name: string) {
+        if (!(name in TossCardName)) {
             throw new BadRequestException(invalidValue("토스 지정 카드이름"));
         }
     }
