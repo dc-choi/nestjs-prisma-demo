@@ -1,23 +1,19 @@
-import { MemberEntity } from "@api/v1/member/domain/entity/Member.entity";
+import { MemberDomain } from "@api/v1/member/domain/Member.domain";
 
 describe("Member Unit Test", () => {
     describe("member.generateHashedPassword", () => {
         it("normal case", () => {
-            const member = new MemberEntity();
-            member.generateHashedPassword("password", String(process.env.SECRET));
-            expect(member.hashedPassword).toBeTruthy();
-            expect(member.hashedPassword).not.toBeNull();
-            expect(member.hashedPassword?.length).toBeGreaterThanOrEqual(1);
+            const newPassword = MemberDomain.generateHashedPassword("password", String(process.env.SECRET));
+            expect(newPassword).toBeTruthy();
+            expect(newPassword).not.toBeNull();
         });
 
         it("wrong secret key", () => {
-            const member = new MemberEntity();
-            member.generateHashedPassword("password", String(process.env.SECRET));
+            const password = MemberDomain.generateHashedPassword("password", String(process.env.SECRET));
 
-            const wrongMember = new MemberEntity();
-            wrongMember.generateHashedPassword("password", "");
+            const wrongPassword = MemberDomain.generateHashedPassword("password", "");
 
-            expect(member.hashedPassword).not.toEqual(wrongMember.hashedPassword);
+            expect(password).not.toEqual(wrongPassword);
         });
     });
 });
