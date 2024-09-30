@@ -6,8 +6,9 @@ import { MemberRole } from "@prisma/client";
 @Injectable()
 export class CommonGuard extends AuthGuard("jwt") {
     handleRequest(err: any, user: any) {
+        if (err) throw err;
+
         if (
-            err ||
             !user ||
             (user.role !== MemberRole.ADMIN && user.role !== MemberRole.USER && user.role !== MemberRole.GUEST)
         ) {
