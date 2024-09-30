@@ -17,7 +17,7 @@ model Member {
   email          String     @db.VarChar(255)
   hashedPassword String?    @map("hashed_password") @db.VarChar(128)
   phone          String     @db.VarChar(255)
-  role           MemberRole @default(USER)
+  role           MemberRole @default(GUEST)
   lastLoginAt    DateTime?  @map("last_login_at") @db.DateTime(0)
   createdAt      DateTime   @default(now()) @map("created_at") @db.DateTime(0)
   updatedAt      DateTime   @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
@@ -36,7 +36,8 @@ model Member {
 
 enum MemberRole {
   ADMIN
-  USER
+  VIP
+  GOLD
   GUEST
 }
 
