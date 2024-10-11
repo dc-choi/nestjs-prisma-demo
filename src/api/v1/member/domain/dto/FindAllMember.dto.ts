@@ -14,7 +14,7 @@ export class FindAllMemberResponseDto {
     @ApiProperty({ description: "연락처", example: "01011111111" })
     phone: string;
 
-    @ApiProperty({ description: "권한", enum: MemberRole, example: MemberRole.USER })
+    @ApiProperty({ description: "권한", enum: MemberRole, example: MemberRole.GUEST })
     role: MemberRole;
 
     @ApiProperty({ description: "마지막 로그인 시간", example: "2021-09-01T00:00:00" })

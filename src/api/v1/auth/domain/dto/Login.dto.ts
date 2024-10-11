@@ -27,7 +27,7 @@ export class LoginResponseDto {
     @ApiProperty({ description: "refreshToken 값" })
     refreshToken: string;
 
-    @ApiProperty({ description: "사용자의 권한", example: MemberRole.USER })
+    @ApiProperty({ description: "사용자의 권한", example: MemberRole.GUEST })
     role: MemberRole;
 
     @ApiProperty({ description: "첫 로그인 여부", example: true })

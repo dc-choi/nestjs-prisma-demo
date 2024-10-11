@@ -40,7 +40,7 @@ export class SignupRequestDto {
     @Matches(PHONE_REGEXP, { message: invalidValue("연락처") })
     phone: string;
 
-    @ApiProperty({ description: "권한", enum: MemberRole, example: MemberRole.USER })
+    @ApiProperty({ description: "권한", enum: MemberRole, example: MemberRole.GUEST })
     @IsEnum(MemberRole, { message: invalidValue("권한") })
     @IsNotEmpty({ message: emptyValue("권한") })
     role: MemberRole;
@@ -56,7 +56,7 @@ export class SignupResponseDto {
     @ApiProperty({ description: "연락처", example: "01011111111" })
     phone: string;
 
-    @ApiProperty({ description: "권한", enum: MemberRole, example: MemberRole.USER })
+    @ApiProperty({ description: "권한", enum: MemberRole, example: MemberRole.GUEST })
     role: MemberRole;
 
     constructor(member?: Member) {
