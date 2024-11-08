@@ -1,0 +1,11 @@
+### sign up
+POST localhost:3000/api/v1/members
+Content-Type: application/json
+
+{
+  "name": "ddagae0805",
+  "email": "ddagae0805@gmail.com",
+  "password": "ddagae0805",
+  "phone": "01011111111",
+  "role": "ADMIN"
+}
