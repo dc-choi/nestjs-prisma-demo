@@ -6,10 +6,11 @@ import { BadRequestException, ConflictException, Injectable } from "@nestjs/comm
 import { ConfigService } from "@nestjs/config";
 import { EventBus } from "@nestjs/cqrs";
 
-import { Repository } from "../../../../../prisma/repository";
 import { FindAllMemberResponseDto } from "../domain/dto/FindAllMember.dto";
 import { SignupRequestDto, SignupResponseDto } from "../domain/dto/Signup.dto";
 import { SignupEvent } from "./event/Signup.event";
+
+import { Repository } from "prisma/repository";
 
 @Injectable()
 export class MemberService {

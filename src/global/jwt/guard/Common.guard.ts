@@ -11,8 +11,8 @@ export class CommonGuard extends AuthGuard("jwt") {
         if (
             !user ||
             (user.role !== MemberRole.ADMIN &&
-                user.role !== MemberRole.VIP &&
-                user.role !== MemberRole.GOLD &&
+                user.role !== MemberRole.CUSTOMER &&
+                user.role !== MemberRole.SELLER &&
                 user.role !== MemberRole.GUEST)
         ) {
             throw new UnauthorizedException(new Unauthorized(user.role));
