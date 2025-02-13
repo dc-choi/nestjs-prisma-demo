@@ -5,11 +5,16 @@ import { winstonTransports } from "@global/config/logger/Winston.config";
 import { TokenModule } from "@global/jwt/Token.module";
 import { MailModule } from "@infra/mail/Mail.module";
 import { RedisModule } from "@infra/redis/Redis.module";
+import { ClsPluginTransactional } from "@nestjs-cls/transactional";
+import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 
+import { Repository } from "../prisma/repository";
+
 import Joi from "joi";
 import { WinstonModule } from "nest-winston";
+import { ClsModule } from "nestjs-cls";
 import { DaoModule } from "prisma/dao.module";
 
 @Module({
@@ -30,6 +35,17 @@ import { DaoModule } from "prisma/dao.module";
         }),
         WinstonModule.forRoot({
             transports: winstonTransports,
+        }),
+        ClsModule.forRoot({
+            global: true,
+            middleware: { mount: true },
+            plugins: [
+                new ClsPluginTransactional({
+                    adapter: new TransactionalAdapterPrisma({
+                        prismaInjectionToken: Repository,
+                    }),
+                }),
+            ],
         }),
         DaoModule,
         AuthModule,
