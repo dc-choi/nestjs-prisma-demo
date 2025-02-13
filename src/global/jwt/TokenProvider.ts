@@ -1,5 +1,5 @@
 import { InvalidRefreshToken, NotExpiredAccessToken } from "@global/common/error/AuthError";
-import { WEEK } from "@global/common/utils/time";
+import { WEEK } from "@global/common/utils/Time";
 import { Redis } from "@infra/redis/Redis";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
