@@ -1,10 +1,10 @@
-import { emptyValue, invalidMax, invalidValue } from "@global/common/message/ErrorMessage";
-import { EMAIL_MAX_LENGTH } from "@global/common/utils/MaxLength";
-import { EMAIL_REGEXP } from "@global/common/utils/RegExpPattern";
 import { ApiProperty } from "@nestjs/swagger";
 import { MemberRole } from "@prisma/client";
 
 import { IsNotEmpty, IsString, Matches, MaxLength } from "class-validator";
+import { emptyValue, invalidMax, invalidValue } from "~/global/common/message/ErrorMessage";
+import { EMAIL_MAX_LENGTH } from "~/global/common/utils/MaxLength";
+import { EMAIL_REGEXP } from "~/global/common/utils/RegExpPattern";
 
 export class LoginRequestDto {
     @ApiProperty({ description: "이메일", example: "qkrwotjd1445@naver.com" })

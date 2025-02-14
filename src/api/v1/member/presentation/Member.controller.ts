@@ -1,11 +1,12 @@
-import { FindAllMemberResponseDto } from "@api/v1/member/domain/dto/FindAllMember.dto";
-import { ExistingMember, InvalidMember } from "@global/common/error/MemberError";
-import { CommonGuard } from "@global/jwt/guard/Common.guard";
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { MemberService } from "../application/Member.service";
 import { SignupRequestDto, SignupResponseDto } from "../domain/dto/Signup.dto";
+
+import { FindAllMemberResponseDto } from "~/api/v1/member/domain/dto/FindAllMember.dto";
+import { ExistingMember, InvalidMember } from "~/global/common/error/MemberError";
+import { CommonGuard } from "~/global/jwt/guard/Common.guard";
 
 @ApiTags("Member APIs")
 @Controller("v1/members")

@@ -1,11 +1,12 @@
-import { EnvConfig } from "@global/config/env/Env.config";
-import { RedisModule } from "@infra/redis/Redis.module";
 import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 
 import { TokenProvider } from "./TokenProvider";
 import { JwtStrategy } from "./strategy/JwtStrategy";
+
+import { EnvConfig } from "~/global/config/env/Env.config";
+import { RedisModule } from "~/infra/redis/Redis.module";
 
 @Module({
     imports: [

@@ -1,15 +1,15 @@
-import { emptyValue, invalidMax, invalidValue } from "@global/common/message/ErrorMessage";
+import { ApiProperty } from "@nestjs/swagger";
+import { Member, MemberRole } from "@prisma/client";
+
+import { IsEnum, IsNotEmpty, IsString, Matches, MaxLength } from "class-validator";
+import { emptyValue, invalidMax, invalidValue } from "~/global/common/message/ErrorMessage";
 import {
     EMAIL_MAX_LENGTH,
     NAME_MAX_LENGTH,
     PASSWORD_MAX_LENGTH,
     PHONE_MAX_LENGTH,
-} from "@global/common/utils/MaxLength";
-import { EMAIL_REGEXP, NAME_REGEXP, PASSWORD_REGEXP, PHONE_REGEXP } from "@global/common/utils/RegExpPattern";
-import { ApiProperty } from "@nestjs/swagger";
-import { Member, MemberRole } from "@prisma/client";
-
-import { IsEnum, IsNotEmpty, IsString, Matches, MaxLength } from "class-validator";
+} from "~/global/common/utils/MaxLength";
+import { EMAIL_REGEXP, NAME_REGEXP, PASSWORD_REGEXP, PHONE_REGEXP } from "~/global/common/utils/RegExpPattern";
 
 export class SignupRequestDto {
     @ApiProperty({ description: "회원 이름", example: "username" })

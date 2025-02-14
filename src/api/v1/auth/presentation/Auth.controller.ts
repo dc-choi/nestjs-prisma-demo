@@ -1,11 +1,12 @@
-import { InvalidIdOrPassword, InvalidRefreshToken, NotExpiredAccessToken } from "@global/common/error/AuthError";
-import { NotExistingMember } from "@global/common/error/MemberError";
 import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
 import { ApiExtraModels, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from "@nestjs/swagger";
 
 import { AuthService } from "../application/Auth.service";
 import { AuthTokenRequestDto, AuthTokenResponseDto } from "../domain/dto/AuthToken.dto";
 import { LoginRequestDto, LoginResponseDto } from "../domain/dto/Login.dto";
+
+import { InvalidIdOrPassword, InvalidRefreshToken, NotExpiredAccessToken } from "~/global/common/error/AuthError";
+import { NotExistingMember } from "~/global/common/error/MemberError";
 
 @ApiTags("Auth API's")
 @Controller("v1/auth")

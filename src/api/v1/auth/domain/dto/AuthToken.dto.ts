@@ -1,7 +1,7 @@
-import { emptyValue, invalidValue } from "@global/common/message/ErrorMessage";
 import { ApiProperty } from "@nestjs/swagger";
 
 import { IsNotEmpty, IsString, IsUUID } from "class-validator";
+import { emptyValue, invalidValue } from "~/global/common/message/ErrorMessage";
 
 export class AuthTokenRequestDto {
     @ApiProperty({

@@ -1,4 +1,3 @@
-import { EnvConfig } from "@global/config/env/Env.config";
 import { MailerModule } from "@nestjs-modules/mailer";
 import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
 import { Module } from "@nestjs/common";
@@ -6,6 +5,8 @@ import { ConfigService } from "@nestjs/config";
 import { CqrsModule } from "@nestjs/cqrs";
 
 import { SendSignupAlertHandler } from "./handler/SendSignupAlert.handler";
+
+import { EnvConfig } from "~/global/config/env/Env.config";
 
 @Module({
     imports: [

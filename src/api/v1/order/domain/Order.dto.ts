@@ -1,8 +1,8 @@
-import { emptyValue, invalidMax, invalidMin, invalidValue } from "@global/common/message/ErrorMessage";
-import { IsBigInt } from "@global/common/utils/IsBigInt";
 import { ApiProperty } from "@nestjs/swagger";
 
 import { IsNotEmpty, IsNumber, Max, Min } from "class-validator";
+import { emptyValue, invalidMax, invalidMin, invalidValue } from "~/global/common/message/ErrorMessage";
+import { IsBigInt } from "~/global/common/utils/IsBigInt";
 
 export class OrderItemRequest {
     @ApiProperty({ description: "상품 ID", example: 1n })

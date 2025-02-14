@@ -1,0 +1,28 @@
+{
+  "$schema": "https://swc.rs/schema.json",
+  "sourceMaps": true,
+  "module": {
+    "type": "commonjs",
+    "strict": true,
+    "strictMode": true,
+    "noInterop": false,
+    "importInterop": "swc"
+  },
+  "jsc": {
+    "externalHelpers": false,
+    "target": "esnext",
+    "parser": {
+      "syntax": "typescript",
+      "decorators": true
+    },
+    "transform": {
+      "legacyDecorator": true,
+      "decoratorMetadata": true
+    },
+    "keepClassNames": true,
+    "paths": {
+      "~/*": ["./src/*"]
+    },
+    "baseUrl": "./",
+  },
+}

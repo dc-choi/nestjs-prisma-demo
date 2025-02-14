@@ -1,6 +1,7 @@
-import { sqlLogger } from "@global/config/logger/Winston.config";
 import { INestApplication, Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { PrismaClient } from "@prisma/client";
+
+import { sqlLogger } from "~/global/config/logger/Winston.config";
 
 @Injectable()
 export class Repository extends PrismaClient implements OnModuleInit, OnModuleDestroy {

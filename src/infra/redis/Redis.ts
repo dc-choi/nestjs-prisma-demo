@@ -1,8 +1,8 @@
-import { EnvConfig } from "@global/config/env/Env.config";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 import { RedisClientType, createClient } from "redis";
+import { EnvConfig } from "~/global/config/env/Env.config";
 
 @Injectable()
 export class Redis {

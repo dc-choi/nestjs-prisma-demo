@@ -1,8 +1,3 @@
-import { MemberDomain } from "@api/v1/member/domain/Member.domain";
-import { InvalidIdOrPassword } from "@global/common/error/AuthError";
-import { NotExistingMember } from "@global/common/error/MemberError";
-import { EnvConfig } from "@global/config/env/Env.config";
-import { TokenProvider } from "@global/jwt/TokenProvider";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
@@ -11,6 +6,11 @@ import { LoginRequestDto, LoginResponseDto } from "../domain/dto/Login.dto";
 
 import dayjs from "dayjs";
 import { Repository } from "prisma/repository";
+import { MemberDomain } from "~/api/v1/member/domain/Member.domain";
+import { InvalidIdOrPassword } from "~/global/common/error/AuthError";
+import { NotExistingMember } from "~/global/common/error/MemberError";
+import { EnvConfig } from "~/global/config/env/Env.config";
+import { TokenProvider } from "~/global/jwt/TokenProvider";
 
 @Injectable()
 export class AuthService {

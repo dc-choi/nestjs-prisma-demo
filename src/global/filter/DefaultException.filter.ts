@@ -1,4 +1,3 @@
-import { deletePasswordInLog } from "@global/common/utils/password";
 import {
     ArgumentsHost,
     BadRequestException,
@@ -12,6 +11,7 @@ import {
 } from "@nestjs/common";
 
 import { Request, Response } from "express";
+import { deletePasswordInLog } from "~/global/common/utils/password";
 
 @Catch(HttpException, BadRequestException, UnauthorizedException, ConflictException, NotFoundException)
 export class DefaultExceptionFilter implements ExceptionFilter {

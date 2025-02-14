@@ -20,6 +20,6 @@ export const swaggerSetup = (app: INestApplication, prefix: string) => {
             "Authorization"
         )
         .build();
-    const document = SwaggerModule.createDocument(app, config);
+    const document = () => SwaggerModule.createDocument(app, config);
     SwaggerModule.setup(`${prefix}/docs`, app, document);
 };

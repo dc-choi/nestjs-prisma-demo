@@ -1,7 +1,8 @@
-import { SignupEvent } from "@api/v1/member/application/event/Signup.event";
-import { verboseLogger } from "@global/config/logger/Winston.config";
 import { MailerService } from "@nestjs-modules/mailer";
 import { EventsHandler, IEventHandler } from "@nestjs/cqrs";
+
+import { SignupEvent } from "~/api/v1/member/application/event/Signup.event";
+import { verboseLogger } from "~/global/config/logger/Winston.config";
 
 @EventsHandler(SignupEvent)
 export class SendSignupAlertHandler implements IEventHandler<SignupEvent> {

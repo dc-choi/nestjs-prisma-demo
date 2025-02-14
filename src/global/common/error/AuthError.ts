@@ -12,7 +12,14 @@ export class Unauthorized {
     @ApiProperty({ example: "UNAUTHORIZED" })
     type = "UNAUTHORIZED";
 
-    @ApiProperty({ example: MemberRole.GUEST })
+    @ApiProperty({
+        examples: [
+            MemberRole.GUEST.toString(),
+            MemberRole.ADMIN.toString(),
+            MemberRole.CUSTOMER.toString(),
+            MemberRole.SELLER.toString(),
+        ],
+    })
     role?: MemberRole | null;
 }
 
