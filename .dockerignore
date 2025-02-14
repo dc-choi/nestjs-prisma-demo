@@ -1,2 +1,17 @@
 node_modules
 dist
+logs
+test
+
+.git
+.github/**
+http
+deployment/**
+.eslintrc.js
+.prettierrc.js
+Readme.md
+env.example
+jest-**.json
+jest.**.json
+.gitignore
+.dockerignore
