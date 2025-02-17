@@ -1,16 +1,16 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
-import { AuthTokenRequestDto, AuthTokenResponseDto } from "../domain/dto/AuthToken.dto";
-import { LoginRequestDto, LoginResponseDto } from "../domain/dto/Login.dto";
+import { AuthTokenRequestDto, AuthTokenResponseDto } from '../domain/dto/AuthToken.dto';
+import { LoginRequestDto, LoginResponseDto } from '../domain/dto/Login.dto';
 
-import dayjs from "dayjs";
-import { Repository } from "prisma/repository";
-import { MemberDomain } from "~/api/v1/member/domain/Member.domain";
-import { InvalidIdOrPassword } from "~/global/common/error/AuthError";
-import { NotExistingMember } from "~/global/common/error/MemberError";
-import { EnvConfig } from "~/global/config/env/Env.config";
-import { TokenProvider } from "~/global/jwt/TokenProvider";
+import dayjs from 'dayjs';
+import { Repository } from 'prisma/repository';
+import { MemberDomain } from '~/api/v1/member/domain/Member.domain';
+import { InvalidIdOrPassword } from '~/global/common/error/AuthError';
+import { NotExistingMember } from '~/global/common/error/MemberError';
+import { EnvConfig } from '~/global/config/env/Env.config';
+import { TokenProvider } from '~/global/jwt/TokenProvider';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +21,7 @@ export class AuthService {
     ) {}
 
     async login(loginRequestDto: LoginRequestDto) {
-        const salt = this.config.get<string>("SECRET");
+        const salt = this.config.get<string>('SECRET');
         const { email, password } = loginRequestDto;
 
         const findMember = await this.repository.member.findFirst({

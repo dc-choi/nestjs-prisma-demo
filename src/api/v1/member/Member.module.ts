@@ -1,8 +1,8 @@
-import { Module } from "@nestjs/common";
-import { CqrsModule } from "@nestjs/cqrs";
+import { Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
 
-import { MemberService } from "./application/Member.service";
-import { MemberController } from "./presentation/Member.controller";
+import { MemberService } from './application/Member.service';
+import { MemberController } from './presentation/Member.controller';
 
 @Module({
     imports: [CqrsModule],

@@ -1,27 +1,27 @@
-import { ClsPluginTransactional } from "@nestjs-cls/transactional";
-import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
+import { ClsPluginTransactional } from '@nestjs-cls/transactional';
+import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 
-import Joi from "joi";
-import { WinstonModule } from "nest-winston";
-import { ClsModule } from "nestjs-cls";
-import { DaoModule } from "prisma/dao.module";
-import { Repository } from "prisma/repository";
-import { AuthModule } from "~/api/v1/auth/Auth.module";
-import { MemberModule } from "~/api/v1/member/Member.module";
-import { OrderModule } from "~/api/v1/order/Order.module";
-import { winstonTransports } from "~/global/config/logger/Winston.config";
-import { TokenModule } from "~/global/jwt/Token.module";
-import { MailModule } from "~/infra/mail/Mail.module";
-import { RedisModule } from "~/infra/redis/Redis.module";
+import Joi from 'joi';
+import { WinstonModule } from 'nest-winston';
+import { ClsModule } from 'nestjs-cls';
+import { DaoModule } from 'prisma/dao.module';
+import { Repository } from 'prisma/repository';
+import { AuthModule } from '~/api/v1/auth/Auth.module';
+import { MemberModule } from '~/api/v1/member/Member.module';
+import { OrderModule } from '~/api/v1/order/Order.module';
+import { winstonTransports } from '~/global/config/logger/Winston.config';
+import { TokenModule } from '~/global/jwt/Token.module';
+import { MailModule } from '~/infra/mail/Mail.module';
+import { RedisModule } from '~/infra/redis/Redis.module';
 
 @Module({
     imports: [
         // ENV
         ConfigModule.forRoot({
             isGlobal: true,
-            envFilePath: [".env"],
+            envFilePath: ['.env'],
             validationSchema: Joi.object({
                 SERVER_PORT: Joi.number().optional().default(3000),
                 DATABASE_URL: Joi.string().required(),

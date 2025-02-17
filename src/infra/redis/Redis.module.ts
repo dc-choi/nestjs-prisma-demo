@@ -1,6 +1,6 @@
-import { Module } from "@nestjs/common";
+import { Module } from '@nestjs/common';
 
-import { Redis } from "./Redis";
+import { Redis } from './Redis';
 
 @Module({
     providers: [Redis],

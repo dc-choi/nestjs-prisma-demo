@@ -1,8 +1,8 @@
-import { MailerService } from "@nestjs-modules/mailer";
-import { EventsHandler, IEventHandler } from "@nestjs/cqrs";
+import { MailerService } from '@nestjs-modules/mailer';
+import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 
-import { SignupEvent } from "~/api/v1/member/application/event/Signup.event";
-import { verboseLogger } from "~/global/config/logger/Winston.config";
+import { SignupEvent } from '~/api/v1/member/application/event/Signup.event';
+import { verboseLogger } from '~/global/config/logger/Winston.config';
 
 @EventsHandler(SignupEvent)
 export class SendSignupAlertHandler implements IEventHandler<SignupEvent> {
@@ -13,9 +13,9 @@ export class SendSignupAlertHandler implements IEventHandler<SignupEvent> {
 
         this.mailerService
             .sendMail({
-                to: to.split(","),
+                to: to.split(','),
                 subject: `[회원 유입] ${name}님이 가입하셨습니다.`,
-                template: "./signup",
+                template: './signup',
                 context: {
                     name,
                     email,

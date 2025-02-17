@@ -1,26 +1,26 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Member, MemberRole } from "@prisma/client";
+import { ApiProperty } from '@nestjs/swagger';
+import { Member, MemberRole } from '@prisma/client';
 
 export class FindAllMemberResponseDto {
-    @ApiProperty({ description: "회원 ID", example: 1 })
+    @ApiProperty({ description: '회원 ID', example: 1 })
     id: bigint;
 
-    @ApiProperty({ description: "회원 이름", example: "username" })
+    @ApiProperty({ description: '회원 이름', example: 'username' })
     name: string;
 
-    @ApiProperty({ description: "이메일", example: "qkrwotjd1445@naver.com" })
+    @ApiProperty({ description: '이메일', example: 'qkrwotjd1445@naver.com' })
     email: string;
 
-    @ApiProperty({ description: "연락처", example: "01011111111" })
+    @ApiProperty({ description: '연락처', example: '01011111111' })
     phone: string;
 
-    @ApiProperty({ description: "권한", enum: MemberRole, example: MemberRole.GUEST })
+    @ApiProperty({ description: '권한', enum: MemberRole, example: MemberRole.GUEST })
     role: MemberRole;
 
-    @ApiProperty({ description: "마지막 로그인 시간", example: "2021-09-01T00:00:00" })
+    @ApiProperty({ description: '마지막 로그인 시간', example: '2021-09-01T00:00:00' })
     lastLoginAt: Date | null;
 
-    @ApiProperty({ description: "회원 가입 시간", example: "2021-09-01T00:00:00" })
+    @ApiProperty({ description: '회원 가입 시간', example: '2021-09-01T00:00:00' })
     createdAt: Date;
 
     constructor(data?: Member) {

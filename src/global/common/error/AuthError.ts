@@ -1,16 +1,16 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { MemberRole } from "@prisma/client";
+import { ApiProperty } from '@nestjs/swagger';
+import { MemberRole } from '@prisma/client';
 
 export class Unauthorized {
     constructor(role?: MemberRole) {
         this.role = role;
     }
 
-    @ApiProperty({ example: "인증되지 않았습니다." })
-    message = "인증되지 않았습니다.";
+    @ApiProperty({ example: '인증되지 않았습니다.' })
+    message = '인증되지 않았습니다.';
 
-    @ApiProperty({ example: "UNAUTHORIZED" })
-    type = "UNAUTHORIZED";
+    @ApiProperty({ example: 'UNAUTHORIZED' })
+    type = 'UNAUTHORIZED';
 
     @ApiProperty({
         examples: [
@@ -24,25 +24,25 @@ export class Unauthorized {
 }
 
 export class InvalidIdOrPassword {
-    @ApiProperty({ example: "아이디 또는 패스워드가 잘못되었습니다." })
-    message = "아이디 또는 패스워드가 잘못되었습니다.";
+    @ApiProperty({ example: '아이디 또는 패스워드가 잘못되었습니다.' })
+    message = '아이디 또는 패스워드가 잘못되었습니다.';
 
-    @ApiProperty({ example: "INVALID_ID_OR_PASSWORD" })
-    type = "INVALID_ID_OR_PASSWORD";
+    @ApiProperty({ example: 'INVALID_ID_OR_PASSWORD' })
+    type = 'INVALID_ID_OR_PASSWORD';
 }
 
 export class NotExpiredAccessToken {
-    @ApiProperty({ example: "만료된 accessToken이여야 합니다." })
-    message = "만료된 accessToken이여야 합니다.";
+    @ApiProperty({ example: '만료된 accessToken이여야 합니다.' })
+    message = '만료된 accessToken이여야 합니다.';
 
-    @ApiProperty({ example: "NOT_EXPIRED_ACCESS_TOKEN" })
-    type = "NOT_EXPIRED_ACCESS_TOKEN";
+    @ApiProperty({ example: 'NOT_EXPIRED_ACCESS_TOKEN' })
+    type = 'NOT_EXPIRED_ACCESS_TOKEN';
 }
 
 export class InvalidRefreshToken {
-    @ApiProperty({ example: "refreshToken이 잘못되었습니다." })
-    message = "refreshToken이 잘못되었습니다.";
+    @ApiProperty({ example: 'refreshToken이 잘못되었습니다.' })
+    message = 'refreshToken이 잘못되었습니다.';
 
-    @ApiProperty({ example: "INVALID_REFRESH_TOKEN" })
-    type = "INVALID_REFRESH_TOKEN";
+    @ApiProperty({ example: 'INVALID_REFRESH_TOKEN' })
+    type = 'INVALID_REFRESH_TOKEN';
 }

@@ -1,7 +1,7 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus, Logger } from "@nestjs/common";
+import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus, Logger } from '@nestjs/common';
 
-import { Request, Response } from "express";
-import { deletePasswordInLog } from "~/global/common/utils/Password";
+import { Request, Response } from 'express';
+import { deletePasswordInLog } from '~/global/common/utils/Password';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -22,6 +22,6 @@ export class AllExceptionFilter implements ExceptionFilter {
 
         this.logger.error(msg);
 
-        response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: "Server Error" });
+        response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Server Error' });
     }
 }

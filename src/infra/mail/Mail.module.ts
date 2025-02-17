@@ -1,12 +1,12 @@
-import { MailerModule } from "@nestjs-modules/mailer";
-import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
-import { Module } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { CqrsModule } from "@nestjs/cqrs";
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { CqrsModule } from '@nestjs/cqrs';
 
-import { SendSignupAlertHandler } from "./handler/SendSignupAlert.handler";
+import { SendSignupAlertHandler } from './handler/SendSignupAlert.handler';
 
-import { EnvConfig } from "~/global/config/env/Env.config";
+import { EnvConfig } from '~/global/config/env/Env.config';
 
 @Module({
     imports: [
@@ -15,19 +15,19 @@ import { EnvConfig } from "~/global/config/env/Env.config";
             useFactory: (configService: ConfigService<EnvConfig, true>) => {
                 return {
                     transport: {
-                        host: "smtp.gmail.com",
+                        host: 'smtp.gmail.com',
                         port: 465,
                         secure: true,
                         auth: {
-                            user: configService.get<string>("MAIL_USER"),
-                            pass: configService.get<string>("MAIL_PASSWORD"),
+                            user: configService.get<string>('MAIL_USER'),
+                            pass: configService.get<string>('MAIL_PASSWORD'),
                         },
                     },
                     defaults: {
-                        from: "Choi Dond Chul",
+                        from: 'Choi Dond Chul',
                     },
                     template: {
-                        dir: "src/global/templates",
+                        dir: 'src/global/templates',
                         adapter: new HandlebarsAdapter(),
                         options: {
                             strict: true,

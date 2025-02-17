@@ -1,11 +1,11 @@
-import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { PassportStrategy } from "@nestjs/passport";
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { PassportStrategy } from '@nestjs/passport';
 
-import { JwtPayload } from "../payload/JwtPayload";
+import { JwtPayload } from '../payload/JwtPayload';
 
-import { ExtractJwt, Strategy } from "passport-jwt";
-import { EnvConfig } from "~/global/config/env/Env.config";
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { EnvConfig } from '~/global/config/env/Env.config';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -13,7 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
-            secretOrKey: configService.get<string>("SECRET"),
+            secretOrKey: configService.get<string>('SECRET'),
         });
     }
 

@@ -1,118 +1,118 @@
-import { WinstonModule, utilities } from "nest-winston";
-import winston from "winston";
-import winstonDaily from "winston-daily-rotate-file";
+import { WinstonModule, utilities } from 'nest-winston';
+import winston from 'winston';
+import winstonDaily from 'winston-daily-rotate-file';
 
 export const verboseLogger = WinstonModule.createLogger({
-    level: "verbose",
+    level: 'verbose',
     format: winston.format.combine(
         winston.format.timestamp(),
-        utilities.format.nestLike("Demo", { colors: true, prettyPrint: true })
+        utilities.format.nestLike('Demo', { colors: true, prettyPrint: true })
     ),
     transports: [
         new winstonDaily({
-            level: "verbose",
+            level: 'verbose',
             format: winston.format.combine(
                 winston.format.timestamp({
-                    format: "YYYY-MM-DD HH:mm:ss",
+                    format: 'YYYY-MM-DD HH:mm:ss',
                 }),
                 winston.format.printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`)
             ),
-            dirname: "logs/verbose",
-            filename: "%DATE%.log",
-            datePattern: "YYYY-MM-DD",
+            dirname: 'logs/verbose',
+            filename: '%DATE%.log',
+            datePattern: 'YYYY-MM-DD',
             zippedArchive: true,
-            maxSize: "20m",
-            maxFiles: "30d",
+            maxSize: '20m',
+            maxFiles: '30d',
         }),
     ],
 });
 
 export const sqlLogger = WinstonModule.createLogger({
-    level: "verbose",
+    level: 'verbose',
     format: winston.format.combine(
         winston.format.timestamp(),
-        utilities.format.nestLike("Demo", { colors: true, prettyPrint: true })
+        utilities.format.nestLike('Demo', { colors: true, prettyPrint: true })
     ),
     transports: [
         new winstonDaily({
-            level: "verbose",
+            level: 'verbose',
             format: winston.format.combine(
                 winston.format.timestamp({
-                    format: "YYYY-MM-DD HH:mm:ss",
+                    format: 'YYYY-MM-DD HH:mm:ss',
                 }),
                 winston.format.printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`)
             ),
-            dirname: "logs/sql",
-            filename: "%DATE%.log",
-            datePattern: "YYYY-MM-DD",
+            dirname: 'logs/sql',
+            filename: '%DATE%.log',
+            datePattern: 'YYYY-MM-DD',
             zippedArchive: true,
-            maxSize: "20m",
-            maxFiles: "30d",
+            maxSize: '20m',
+            maxFiles: '30d',
         }),
     ],
 });
 
 export const infoLogger = WinstonModule.createLogger({
-    level: "http",
+    level: 'http',
     format: winston.format.combine(
         winston.format.timestamp(),
-        utilities.format.nestLike("Demo", { colors: true, prettyPrint: true })
+        utilities.format.nestLike('Demo', { colors: true, prettyPrint: true })
     ),
     transports: [
         new winstonDaily({
-            level: "http",
+            level: 'http',
             format: winston.format.combine(
                 winston.format.timestamp({
-                    format: "YYYY-MM-DD HH:mm:ss",
+                    format: 'YYYY-MM-DD HH:mm:ss',
                 }),
                 winston.format.printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`)
             ),
-            dirname: "logs/info",
-            filename: "%DATE%.log",
-            datePattern: "YYYY-MM-DD",
+            dirname: 'logs/info',
+            filename: '%DATE%.log',
+            datePattern: 'YYYY-MM-DD',
             zippedArchive: true,
-            maxSize: "20m",
-            maxFiles: "30d",
+            maxSize: '20m',
+            maxFiles: '30d',
         }),
     ],
 });
 
 export const winstonTransports = [
     new winston.transports.Console({
-        level: "debug",
+        level: 'debug',
         format: winston.format.combine(
             winston.format.timestamp(),
-            utilities.format.nestLike("Demo", { colors: true, prettyPrint: true })
+            utilities.format.nestLike('Demo', { colors: true, prettyPrint: true })
         ),
     }),
     new winstonDaily({
-        level: "error",
+        level: 'error',
         format: winston.format.combine(
             winston.format.timestamp({
-                format: "YYYY-MM-DD HH:mm:ss",
+                format: 'YYYY-MM-DD HH:mm:ss',
             }),
             winston.format.printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`)
         ),
-        dirname: "logs/error",
-        filename: "%DATE%.log",
-        datePattern: "YYYY-MM-DD",
+        dirname: 'logs/error',
+        filename: '%DATE%.log',
+        datePattern: 'YYYY-MM-DD',
         zippedArchive: true,
-        maxSize: "20m",
-        maxFiles: "30d",
+        maxSize: '20m',
+        maxFiles: '30d',
     }),
     new winstonDaily({
-        level: "warn",
+        level: 'warn',
         format: winston.format.combine(
             winston.format.timestamp({
-                format: "YYYY-MM-DD HH:mm:ss",
+                format: 'YYYY-MM-DD HH:mm:ss',
             }),
             winston.format.printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`)
         ),
-        dirname: "logs/warn",
-        filename: "%DATE%.log",
-        datePattern: "YYYY-MM-DD",
+        dirname: 'logs/warn',
+        filename: '%DATE%.log',
+        datePattern: 'YYYY-MM-DD',
         zippedArchive: true,
-        maxSize: "20m",
-        maxFiles: "30d",
+        maxSize: '20m',
+        maxFiles: '30d',
     }),
 ];

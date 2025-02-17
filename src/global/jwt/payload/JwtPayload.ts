@@ -1,4 +1,4 @@
-import { MemberRole } from "@prisma/client";
+import { MemberRole } from '@prisma/client';
 
 export interface JwtPayload {
     memberId: bigint;

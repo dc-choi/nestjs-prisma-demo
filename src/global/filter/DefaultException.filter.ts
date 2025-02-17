@@ -8,10 +8,10 @@ import {
     Logger,
     NotFoundException,
     UnauthorizedException,
-} from "@nestjs/common";
+} from '@nestjs/common';
 
-import { Request, Response } from "express";
-import { deletePasswordInLog } from "~/global/common/utils/password";
+import { Request, Response } from 'express';
+import { deletePasswordInLog } from '~/global/common/utils/password';
 
 @Catch(HttpException, BadRequestException, UnauthorizedException, ConflictException, NotFoundException)
 export class DefaultExceptionFilter implements ExceptionFilter {
@@ -26,7 +26,7 @@ export class DefaultExceptionFilter implements ExceptionFilter {
 
         const { method, originalUrl, params, body } = request;
         const { host: ip } = request.headers;
-        const message = exceptionResponse["message"];
+        const message = exceptionResponse['message'];
 
         const msg = `${method} ${status} ${originalUrl} ${ip} ${message ?? null} ${JSON.stringify(
             params

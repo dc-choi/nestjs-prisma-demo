@@ -1,5 +1,5 @@
 const stockRaceCondition = () => {
-    const orderApi = "http://localhost:3000/v1/orders";
+    const orderApi = 'http://localhost:3000/v1/orders';
 
     const request1 = fetch(orderApi);
     const request2 = fetch(orderApi);

@@ -1,12 +1,12 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
-import { JwtPayload } from "./payload/JwtPayload";
+import { JwtPayload } from './payload/JwtPayload';
 
-import { v4 as uuid } from "uuid";
-import { InvalidRefreshToken, NotExpiredAccessToken } from "~/global/common/error/AuthError";
-import { WEEK } from "~/global/common/utils/Time";
-import { Redis } from "~/infra/redis/Redis";
+import { v4 as uuid } from 'uuid';
+import { InvalidRefreshToken, NotExpiredAccessToken } from '~/global/common/error/AuthError';
+import { WEEK } from '~/global/common/utils/Time';
+import { Redis } from '~/infra/redis/Redis';
 
 @Injectable()
 export class TokenProvider {
@@ -70,7 +70,7 @@ export class TokenProvider {
      */
     private async verifyAccessToken(accessToken: string) {
         let memberId: bigint = BigInt(0);
-        let role: string = "";
+        let role: string = '';
         let isNotExpired = true;
 
         await this.jwtService.verifyAsync<JwtPayload>(accessToken).catch(() => {

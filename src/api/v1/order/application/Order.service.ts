@@ -1,13 +1,13 @@
-import { TransactionHost, Transactional } from "@nestjs-cls/transactional";
-import { TransactionalAdapterPrisma } from "@nestjs-cls/transactional-adapter-prisma";
-import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
-import { Decimal } from "@prisma/client/runtime/library";
+import { TransactionHost, Transactional } from '@nestjs-cls/transactional';
+import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Decimal } from '@prisma/client/runtime/library';
 
-import { v4 as uuid } from "uuid";
-import { OrderRequestDto, OrderResponseDto } from "~/api/v1/order/domain/Order.dto";
-import { ItemStockShortage, NotExistingItem } from "~/global/common/error/ItemError";
-import { OrderServerError } from "~/global/common/error/OrderError";
-import { JwtPayload } from "~/global/jwt/payload/JwtPayload";
+import { v4 as uuid } from 'uuid';
+import { OrderRequestDto, OrderResponseDto } from '~/api/v1/order/domain/Order.dto';
+import { ItemStockShortage, NotExistingItem } from '~/global/common/error/ItemError';
+import { OrderServerError } from '~/global/common/error/OrderError';
+import { JwtPayload } from '~/global/jwt/payload/JwtPayload';
 
 @Injectable()
 export class OrderService {

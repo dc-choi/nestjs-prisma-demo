@@ -1,11 +1,11 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
-import { MemberRole } from "@prisma/client";
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { MemberRole } from '@prisma/client';
 
-import { Unauthorized } from "~/global/common/error/AuthError";
+import { Unauthorized } from '~/global/common/error/AuthError';
 
 @Injectable()
-export class SellerGuard extends AuthGuard("jwt") {
+export class SellerGuard extends AuthGuard('jwt') {
     handleRequest(err: any, user: any) {
         if (err) throw err;
 

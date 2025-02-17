@@ -1,16 +1,16 @@
-import { BadRequestException, ConflictException, Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import { EventBus } from "@nestjs/cqrs";
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { EventBus } from '@nestjs/cqrs';
 
-import { FindAllMemberResponseDto } from "../domain/dto/FindAllMember.dto";
-import { SignupRequestDto, SignupResponseDto } from "../domain/dto/Signup.dto";
-import { SignupEvent } from "./event/Signup.event";
+import { FindAllMemberResponseDto } from '../domain/dto/FindAllMember.dto';
+import { SignupRequestDto, SignupResponseDto } from '../domain/dto/Signup.dto';
+import { SignupEvent } from './event/Signup.event';
 
-import { Repository } from "prisma/repository";
-import { IdBlackList } from "~/api/v1/member/domain/IdBlackList";
-import { MemberDomain } from "~/api/v1/member/domain/Member.domain";
-import { ExistingMember, InvalidMember } from "~/global/common/error/MemberError";
-import { EnvConfig } from "~/global/config/env/Env.config";
+import { Repository } from 'prisma/repository';
+import { IdBlackList } from '~/api/v1/member/domain/IdBlackList';
+import { MemberDomain } from '~/api/v1/member/domain/Member.domain';
+import { ExistingMember, InvalidMember } from '~/global/common/error/MemberError';
+import { EnvConfig } from '~/global/config/env/Env.config';
 
 @Injectable()
 export class MemberService {
@@ -21,8 +21,8 @@ export class MemberService {
     ) {}
 
     async signup(signupRequestDto: SignupRequestDto) {
-        const emails = this.config.get<string>("MAIL_SIGNUP_ALERT_USER");
-        const salt = this.config.get<string>("SECRET");
+        const emails = this.config.get<string>('MAIL_SIGNUP_ALERT_USER');
+        const salt = this.config.get<string>('SECRET');
         const { name, password, email, phone, role } = signupRequestDto;
 
         if (IdBlackList.includes(name)) throw new BadRequestException(new InvalidMember());
