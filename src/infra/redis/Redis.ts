@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { RedisClientType, createClient } from 'redis';
 import { EnvConfig } from '~/global/config/env/Env.config';
+import { verboseLogger } from '~/global/config/logger/Winston.config';
 
 @Injectable()
 export class Redis {
@@ -10,7 +11,7 @@ export class Redis {
 
     constructor(private readonly configService: ConfigService<EnvConfig, true>) {
         this.redisClient = createClient({ url: this.configService.get<string>('REDIS_URL') });
-        this.redisClient.connect();
+        this.redisClient.connect().then(() => verboseLogger.verbose!('Redis connected'));
     }
 
     /**

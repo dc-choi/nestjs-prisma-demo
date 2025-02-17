@@ -21,7 +21,7 @@ import { RedisModule } from '~/infra/redis/Redis.module';
         // ENV
         ConfigModule.forRoot({
             isGlobal: true,
-            envFilePath: ['.env'],
+            envFilePath: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
             validationSchema: Joi.object({
                 SERVER_PORT: Joi.number().optional().default(3000),
                 DATABASE_URL: Joi.string().required(),
