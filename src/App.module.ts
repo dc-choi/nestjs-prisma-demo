@@ -11,6 +11,8 @@ import { Repository } from 'prisma/repository';
 import { AuthModule } from '~/api/v1/auth/Auth.module';
 import { MemberModule } from '~/api/v1/member/Member.module';
 import { OrderModule } from '~/api/v1/order/Order.module';
+import { OrderV2Module } from '~/api/v2/order/OrderV2.module';
+import { MutexModule } from '~/global/common/lock/Mutex.module';
 import { winstonTransports } from '~/global/config/logger/Winston.config';
 import { TokenModule } from '~/global/jwt/Token.module';
 import { MailModule } from '~/infra/mail/Mail.module';
@@ -56,10 +58,13 @@ import { RedisModule } from '~/infra/redis/Redis.module';
         RedisModule,
         // Token
         TokenModule,
+        // Mutex
+        MutexModule,
         // Business Logic
         AuthModule,
         MemberModule,
         OrderModule,
+        OrderV2Module,
     ],
     controllers: [],
 })

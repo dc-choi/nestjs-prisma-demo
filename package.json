@@ -9,8 +9,8 @@
     "scripts": {
         "prebuild": "rimraf dist",
         "boot": "node dist/src/main.js",
+        "build": "swc src prisma --out-dir dist && prisma generate",
         "dev": "pnpm prebuild && prisma generate && nest start -w",
-        "prod:build": "swc src prisma --out-dir dist && prisma generate",
         "prod": "pnpm prebuild && pnpm build && pnpm boot",
         "lint": "eslint src/",
         "lint:fix": "eslint src/ --fix",
@@ -36,6 +36,7 @@
         "@nestjs/schedule": "^3.0.4",
         "@nestjs/swagger": "^7.1.13",
         "@prisma/client": "^5.10.2",
+        "async-mutex": "^0.5.0",
         "axios": "^1.7.4",
         "builder-pattern": "^2.2.0",
         "class-transformer": "^0.5.1",
