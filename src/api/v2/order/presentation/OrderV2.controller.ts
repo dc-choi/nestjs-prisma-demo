@@ -2,7 +2,7 @@ import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { OrderV2Service } from '~/api/v2/order/application/OrderV2.service';
-import { OrderV2RequestDto, OrderV2ResponseDto } from '~/api/v2/order/domain/OrderV2.dto';
+import { OrderV2RequestDto, OrderV2ResponseDto } from '~/api/v2/order/domain/dto/OrderV2.dto';
 import { Jwt } from '~/global/jwt/decorator/Jwt.decorator';
 import { CommonGuard } from '~/global/jwt/guard/Common.guard';
 import { JwtPayload } from '~/global/jwt/payload/JwtPayload';

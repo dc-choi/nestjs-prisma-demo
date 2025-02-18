@@ -4,7 +4,8 @@ import { BadRequestException, Injectable, InternalServerErrorException } from '@
 import { Decimal } from '@prisma/client/runtime/library';
 
 import { v4 as uuid } from 'uuid';
-import { OrderV2RequestDto, OrderV2ResponseDto } from '~/api/v2/order/domain/OrderV2.dto';
+import { OrderV2RequestDto, OrderV2ResponseDto } from '~/api/v2/order/domain/dto/OrderV2.dto';
+import { OrderedItemInterface } from '~/api/v2/order/domain/interface/OrderedItem.interface';
 import { ItemStockShortage, NotExistingItem } from '~/global/common/error/ItemError';
 import { OrderServerError } from '~/global/common/error/OrderError';
 import { MutexService } from '~/global/common/lock/Mutex.service';
@@ -28,7 +29,7 @@ export class OrderV2Service {
         const { memberId } = jwtPayload;
         const { data: requestedData } = orderV2RequestDto;
 
-        const items: { itemId: bigint; quantity: number; itemPrice: Decimal }[] = [];
+        const items: OrderedItemInterface[] = [];
         let totalPrice = new Decimal(0);
 
         await Promise.all(
