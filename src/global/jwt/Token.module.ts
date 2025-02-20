@@ -6,7 +6,7 @@ import { TokenProvider } from './TokenProvider';
 import { JwtStrategy } from './strategy/JwtStrategy';
 
 import { EnvConfig } from '~/global/config/env/Env.config';
-import { RedisModule } from '~/infra/redis/Redis.module';
+import { RedisService } from '~/infra/redis/Redis.service';
 
 @Module({
     imports: [
@@ -17,9 +17,8 @@ import { RedisModule } from '~/infra/redis/Redis.module';
                 signOptions: { expiresIn: '2h' },
             }),
         }),
-        RedisModule,
     ],
-    providers: [TokenProvider, JwtStrategy],
+    providers: [TokenProvider, JwtStrategy, RedisService],
     exports: [TokenProvider],
 })
 export class TokenModule {}

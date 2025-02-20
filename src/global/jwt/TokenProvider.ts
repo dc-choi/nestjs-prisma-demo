@@ -6,13 +6,13 @@ import { JwtPayload } from './payload/JwtPayload';
 import { v4 as uuid } from 'uuid';
 import { InvalidRefreshToken, NotExpiredAccessToken } from '~/global/common/error/AuthError';
 import { WEEK } from '~/global/common/utils/Time';
-import { Redis } from '~/infra/redis/Redis';
+import { RedisService } from '~/infra/redis/Redis.service';
 
 @Injectable()
 export class TokenProvider {
     constructor(
         private readonly jwtService: JwtService,
-        private readonly redis: Redis
+        private readonly redisService: RedisService
     ) {}
 
     /**
@@ -54,13 +54,13 @@ export class TokenProvider {
      * RTR방식으로 refreshToken 발급
      */
     private async generateRefreshToken(memberId: bigint) {
-        let refreshToken = await this.redis.get(`token:${memberId}`);
-        if (refreshToken) await this.redis.del(`token:${memberId}`);
+        let refreshToken = await this.redisService.get(`token:${memberId}`);
+        if (refreshToken) await this.redisService.del(`token:${memberId}`);
 
         refreshToken = uuid();
 
         // INFO: refreshToken의 유효기간은 2주로 설정
-        await this.redis.set(`token:${memberId}`, refreshToken, WEEK * 2);
+        await this.redisService.set(`token:${memberId}`, refreshToken, WEEK * 2);
 
         return refreshToken;
     }
@@ -89,7 +89,7 @@ export class TokenProvider {
      * refreshToken 검증
      */
     private async verifyRefreshToken(memberId: bigint, refreshToken: string) {
-        const redisToken = await this.redis.get(`token:${memberId}`);
+        const redisToken = await this.redisService.get(`token:${memberId}`);
 
         if (redisToken !== refreshToken) throw new UnauthorizedException(new InvalidRefreshToken());
 
