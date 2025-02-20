@@ -53,6 +53,7 @@ import { RedisService } from '~/infra/redis/Redis.service';
                 }),
             ],
         }),
+        // Redis
         RedisModule.forRootAsync({
             inject: [ConfigService],
             useFactory: (configService: ConfigService<EnvConfig, true>) => ({
@@ -64,7 +65,6 @@ import { RedisService } from '~/infra/redis/Redis.service';
         DaoModule,
         // Infra
         MailModule,
-        RedisModule,
         // Token
         TokenModule,
         // Mutex

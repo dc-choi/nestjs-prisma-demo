@@ -17,15 +17,15 @@ export class RedisService {
      * @param expireSecond 만료초
      */
     async set(key: string, value: string | number, expireSecond: number = 180) {
-        await this.redis.set(key, String(value), 'EX', expireSecond);
+        await this.redis.set(key, value, 'EX', expireSecond);
     }
 
     /**
      * @param key 키
      * @returns 값
      */
-    async get(key: string): Promise<string | null> {
-        return this.redis.get(key);
+    async get(key: string) {
+        return await this.redis.get(key);
     }
 
     /**
