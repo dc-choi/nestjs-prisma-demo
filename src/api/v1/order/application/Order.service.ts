@@ -4,7 +4,7 @@ import { BadRequestException, Injectable, InternalServerErrorException } from '@
 import { Decimal } from '@prisma/client/runtime/library';
 
 import { v4 as uuid } from 'uuid';
-import { OrderRequestDto, OrderResponseDto } from '~/api/v1/order/domain/Order.dto';
+import { OrderRequestDto, OrderResponseDto } from '~/api/v1/order/domain/dto/Order.dto';
 import { ItemStockShortage, NotExistingItem } from '~/global/common/error/ItemError';
 import { OrderServerError } from '~/global/common/error/OrderError';
 import { JwtPayload } from '~/global/jwt/payload/JwtPayload';

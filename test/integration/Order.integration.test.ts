@@ -10,7 +10,7 @@ import { DaoModule } from 'prisma/dao.module';
 import { Repository } from 'prisma/repository';
 import { OrderModule } from '~/api/v1/order/Order.module';
 import { OrderService } from '~/api/v1/order/application/Order.service';
-import { OrderRequestDto } from '~/api/v1/order/domain/Order.dto';
+import { OrderRequestDto } from '~/api/v1/order/domain/dto/Order.dto';
 
 describe('order test', () => {
     let module: TestingModule;
