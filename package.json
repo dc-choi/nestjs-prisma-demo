@@ -17,11 +17,11 @@
         "prod": "pnpm prebuild && pnpm prod:build && pnpm prod:boot",
         "lint": "eslint src/",
         "lint:fix": "eslint src/ --fix",
-        "test": "NODE_ENV=test jest --forceExit --config jest.json",
+        "test": "NODE_ENV=test jest --forceExit",
         "coverage": "NODE_ENV=test jest --coverage",
         "unit": "NODE_ENV=test vitest run test/unit",
-        "integration": "NODE_ENV=test jest --forceExit --config jest.json test/integration",
-        "e2e": "NODE_ENV=test jest --forceExit --config ./jest.e2e.json test/e2e"
+        "integration": "NODE_ENV=test jest --forceExit test/integration",
+        "e2e": "NODE_ENV=test jest --forceExit --config jest.e2e.config.json test/e2e"
     },
     "dependencies": {
         "@aws-sdk/client-s3": "^3.828.0",

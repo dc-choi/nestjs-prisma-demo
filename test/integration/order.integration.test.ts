@@ -2,15 +2,15 @@ import { ClsPluginTransactional } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MemberRole } from '@prisma/client';
+import { ItemSaleStatus, MemberRole } from '@prisma/client';
 
 import Joi from 'joi';
 import { ClsModule } from 'nestjs-cls';
 import { DaoModule } from 'prisma/dao.module';
 import { Repository } from 'prisma/repository';
-import { OrderModule } from '~/api/v1/order/order.module';
 import { OrderService } from '~/api/v1/order/application/order.service';
 import { OrderRequestDto } from '~/api/v1/order/domain/dto/order.dto';
+import { OrderModule } from '~/api/v1/order/order.module';
 
 describe('order test', () => {
     let module: TestingModule;
@@ -49,15 +49,36 @@ describe('order test', () => {
         repository = module.get<Repository>(Repository);
     });
 
+    beforeEach(async () => {
+        await repository.item.create({
+            data: {
+                name: 'test',
+                supplyPrice: 1000,
+                vat: 0,
+                totalPrice: 1000,
+                isTaxFree: true,
+                stock: 50,
+                itemSaleStatus: ItemSaleStatus.ALLOW,
+                memberId: 1n,
+            },
+        });
+    });
+
+    afterEach(async () => {
+        await repository.$transaction([
+            repository.orderItem.deleteMany(),
+            repository.order.deleteMany(),
+            repository.item.deleteMany(),
+        ]);
+    });
+
     afterAll(async () => {
         await module.close();
     });
 
     it('정상 동작 확인', async () => {
         // given
-        const storedItem = await repository.item.findFirst({
-            where: { id: 1n },
-        });
+        const storedItem = (await repository.item.findMany())[0];
         if (!storedItem) throw new Error('Item not found');
         const prevStock = storedItem.stock;
         const quantity = 1;
@@ -66,7 +87,7 @@ describe('order test', () => {
         const orderData: OrderRequestDto = {
             data: [
                 {
-                    itemId: 1n,
+                    itemId: storedItem.id,
                     quantity,
                 },
             ],
@@ -77,7 +98,7 @@ describe('order test', () => {
 
         // then
         const item = await repository.item.findFirst({
-            where: { id: 1n },
+            where: { id: storedItem.id },
         });
         if (!item) throw new Error('Item not found');
         const stock = item.stock;

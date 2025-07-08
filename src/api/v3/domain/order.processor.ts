@@ -1,7 +1,7 @@
 import { TransactionHost, Transactional } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, HttpException, InternalServerErrorException } from '@nestjs/common';
 import { Decimal } from '@prisma/client/runtime/library';
 
 import { Job } from 'bullmq';
@@ -88,11 +88,28 @@ export class OrderProcessor extends WorkerHost {
                 statusCode: 200,
                 message: `${id}번 주문이 성공적으로 접수되었습니다. 총 ${totalPrice.toNumber()}원이 결제되었습니다.`,
             };
-        } catch (error) {
+        } catch (error: unknown) {
+            if (error instanceof HttpException) {
+                return {
+                    success: false,
+                    message: error.message,
+                    statusCode: error.getStatus(),
+                };
+            }
+
+            if (error instanceof Error) {
+                return {
+                    success: false,
+                    message: error.message,
+                    statusCode: 500,
+                };
+            }
+
+            // unknown 타입이거나 non-standard error
             return {
                 success: false,
-                message: error.message ?? 'Unknown error',
-                statusCode: error.getStatus() ?? 500,
+                message: 'Unknown error',
+                statusCode: 500,
             };
         }
     }

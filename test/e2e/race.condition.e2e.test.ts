@@ -5,6 +5,11 @@ import { ItemSaleStatus } from '@prisma/client';
 import { Repository } from 'prisma/repository';
 import request from 'supertest';
 import { AppModule } from '~/app.module';
+import { PQueue } from '~/global/common/utils/PQueue';
+
+const testStock = 100; // 테스트용 재고 수량
+const testQuantity = 1; // 테스트용 수량
+const testOrderCount = 2250; // 테스트용 주문수
 
 describe('race condition test', () => {
     let app: INestApplication;
@@ -37,7 +42,7 @@ describe('race condition test', () => {
                 vat: 0,
                 totalPrice: 1000,
                 isTaxFree: true,
-                stock: 50,
+                stock: testStock,
                 itemSaleStatus: ItemSaleStatus.ALLOW,
                 memberId: 1n,
             },
@@ -56,66 +61,29 @@ describe('race condition test', () => {
         await app.close();
     });
 
-    describe('v1/order test', () => {
-        it('50개의 재고가 있다고 가정했을 때 100개의 요청이 보내짐.', async () => {
+    describe('v3/order test', () => {
+        it('재고가 있다고 가정했을 때 수많은 요청이 보내짐.', async () => {
             const storedItem = await repository.item.findMany({ take: 1 });
 
-            const orderApi = '/api/v1/orders';
+            const orderApi = '/api/v3/orders';
             const orderData = {
                 data: [
                     {
                         itemId: storedItem[0].id,
-                        quantity: 1,
+                        quantity: testQuantity,
                     },
                 ],
             };
 
-            const requestCount = 100;
-            const requests = Array.from({ length: requestCount }, () =>
-                request(app.getHttpServer())
-                    .post(orderApi)
-                    .set('Authorization', `Bearer ${accessToken}`)
-                    .set('Content-Type', 'application/json')
-                    .send(orderData)
-            );
-
-            const results = await Promise.all(requests);
-
-            const successResponses = results.filter((res) => res.status === 201);
-            const failureResponses = results.filter((res) => res.status !== 201);
-            // const afterItem = await repository.item.findMany({ take: 1 });
-            // const afterOrder = await repository.order.findMany();
-            // const afterOrderItem = await repository.orderItem.findMany();
-
-            expect(successResponses.length + failureResponses.length).toBe(requestCount);
-            // expect(successResponses.length).toBeLessThanOrEqual(50); // 재고 50개 제한
-            // expect(afterItem[0].stock).toEqual(0); // 남은 재고 수
-            // expect(afterOrder.length).toEqual(50); // 접수된 주문 수
-            // expect(afterOrderItem.length).toEqual(50); // 접수된 주문 품목 수
-        });
-    });
-
-    describe('v2/order test', () => {
-        it('50개의 재고가 있다고 가정했을 때 100개의 요청이 보내짐.', async () => {
-            const storedItem = await repository.item.findMany({ take: 1 });
-
-            const orderApi = '/api/v2/orders';
-            const orderData = {
-                data: [
-                    {
-                        itemId: storedItem[0].id,
-                        quantity: 1,
-                    },
-                ],
-            };
-
-            const requestCount = 100;
-            const requests = Array.from({ length: requestCount }, () =>
-                request(app.getHttpServer())
-                    .post(orderApi)
-                    .set('Authorization', `Bearer ${accessToken}`)
-                    .set('Content-Type', 'application/json')
-                    .send(orderData)
+            const queue = new PQueue({ concurrency: 10 }); // 이 이상을 넘어가면 무조건 fail
+            const requests = Array.from({ length: testOrderCount }, () =>
+                queue.add(() =>
+                    request(app.getHttpServer())
+                        .post(orderApi)
+                        .set('Authorization', `Bearer ${accessToken}`)
+                        .set('Content-Type', 'application/json')
+                        .send(orderData)
+                )
             );
 
             const results = await Promise.all(requests);
@@ -126,11 +94,11 @@ describe('race condition test', () => {
             const afterOrder = await repository.order.findMany();
             const afterOrderItem = await repository.orderItem.findMany();
 
-            expect(successResponses.length + failureResponses.length).toBe(requestCount);
-            expect(successResponses.length).toBeLessThanOrEqual(50); // 재고 50개 제한
+            expect(successResponses.length + failureResponses.length).toBe(testOrderCount);
+            expect(successResponses.length).toBeLessThanOrEqual(testStock); // 재고 50개 제한
             expect(afterItem[0].stock).toEqual(0); // 남은 재고 수
-            expect(afterOrder.length).toEqual(50); // 접수된 주문 수
-            expect(afterOrderItem.length).toEqual(50); // 접수된 주문 품목 수
+            expect(afterOrder.length).toEqual(testStock); // 접수된 주문 수
+            expect(afterOrderItem.length).toEqual(testStock); // 접수된 주문 품목 수
         });
     });
 });
