@@ -1,17 +1,16 @@
 import { TransactionHost, Transactional } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { BadRequestException, HttpException, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { Decimal } from '@prisma/client/runtime/library';
 
 import { Job } from 'bullmq';
 import { v7 as uuid } from 'uuid';
 import { OrderedItemInterface } from '~/api/v2/order/domain/interface/orderedItem.interface';
-import { OrderV3RequestDto } from '~/api/v3/domain/dto/orderV3.dto';
+import { OrderQueueRequest } from '~/api/v3/domain/message/order-queue.message';
 import { ItemStockShortage, NotExistingItem } from '~/global/common/error/item.error';
 import { OrderServerError } from '~/global/common/error/order.error';
-import { QueueMessage } from '~/global/common/message/queue.message';
-import { JwtPayload } from '~/global/jwt/payload/jwt.payload';
+import { QueueResponse, queueErrorHandler } from '~/global/common/message/queue.message';
 import { ORDER_QUEUE } from '~/infra/queue/queue.symbol';
 
 @Processor(ORDER_QUEUE)
@@ -21,13 +20,11 @@ export class OrderProcessor extends WorkerHost {
     }
 
     @Transactional<TransactionalAdapterPrisma>()
-    async process(
-        job: Job<{ jwtPayload: JwtPayload; orderV3RequestDto: OrderV3RequestDto }, QueueMessage, string>
-    ): Promise<QueueMessage> {
-        const { jwtPayload, orderV3RequestDto } = job.data;
+    async process(job: Job<OrderQueueRequest, QueueResponse, string>): Promise<QueueResponse> {
+        const { jwt, payload } = job.data;
 
-        const { memberId } = jwtPayload;
-        const { data: requestedData } = orderV3RequestDto;
+        const { memberId } = jwt;
+        const { data: requestedData } = payload;
 
         const items: OrderedItemInterface[] = [];
         let totalPrice = new Decimal(0);
@@ -89,28 +86,7 @@ export class OrderProcessor extends WorkerHost {
                 message: `${id}번 주문이 성공적으로 접수되었습니다. 총 ${totalPrice.toNumber()}원이 결제되었습니다.`,
             };
         } catch (error: unknown) {
-            if (error instanceof HttpException) {
-                return {
-                    success: false,
-                    message: error.message,
-                    statusCode: error.getStatus(),
-                };
-            }
-
-            if (error instanceof Error) {
-                return {
-                    success: false,
-                    message: error.message,
-                    statusCode: 500,
-                };
-            }
-
-            // unknown 타입이거나 non-standard error
-            return {
-                success: false,
-                message: 'Unknown error',
-                statusCode: 500,
-            };
+            return queueErrorHandler(error);
         }
     }
 }

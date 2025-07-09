@@ -3,9 +3,9 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { Queue, QueueEvents } from 'bullmq';
 import { OrderV3RequestDto, OrderV3ResponseDto } from '~/api/v3/domain/dto/orderV3.dto';
-import { checkQueueMessage } from '~/global/common/error/system.error';
+import { OrderQueueRequest } from '~/api/v3/domain/message/order-queue.message';
 import { DistributedLock } from '~/global/common/lock/DistributedLock';
-import { QueueMessage } from '~/global/common/message/queue.message';
+import { QueueResponse, checkQueueMessage } from '~/global/common/message/queue.message';
 import { JwtPayload } from '~/global/jwt/payload/jwt.payload';
 import { CREATE_ORDER, ORDER_QUEUE } from '~/infra/queue/queue.symbol';
 
@@ -13,13 +13,9 @@ import { CREATE_ORDER, ORDER_QUEUE } from '~/infra/queue/queue.symbol';
 export class OrderV3Service {
     constructor(
         @InjectQueue(ORDER_QUEUE)
-        private readonly orderQueue: Queue<
-            { jwtPayload: JwtPayload; orderV3RequestDto: OrderV3RequestDto },
-            QueueMessage,
-            string
-        >,
+        private readonly orderQueue: Queue<OrderQueueRequest, QueueResponse, string>,
         @Inject(CREATE_ORDER)
-        private readonly queueEvents: QueueEvents
+        private readonly createOrderEvent: QueueEvents
     ) {}
 
     @DistributedLock((_: JwtPayload, orderV3RequestDto: OrderV3RequestDto) => {
@@ -29,11 +25,11 @@ export class OrderV3Service {
     async order(jwtPayload: JwtPayload, orderV3RequestDto: OrderV3RequestDto) {
         const job = await this.orderQueue.add(
             ORDER_QUEUE,
-            { jwtPayload, orderV3RequestDto },
+            { jwt: jwtPayload, payload: orderV3RequestDto },
             { removeOnComplete: false }
         );
 
-        const result = await job.waitUntilFinished(this.queueEvents, 2000);
+        const result = await job.waitUntilFinished(this.createOrderEvent, 3000);
         checkQueueMessage(result);
 
         return new OrderV3ResponseDto(result.message);
