@@ -16,7 +16,7 @@ export class OrderController {
     @HttpCode(HttpStatus.CREATED)
     @UseGuards(CommonGuard)
     @ApiBearerAuth('Authorization')
-    @ApiOperation({ summary: '상품 주문' })
+    @ApiOperation({ summary: '상품 주문', deprecated: true })
     @ApiResponse({ status: HttpStatus.CREATED, type: OrderResponseDto })
     async order(@Jwt() jwtPayload: JwtPayload, @Body() orderRequestDto: OrderRequestDto) {
         return await this.orderService.order(jwtPayload, orderRequestDto);
