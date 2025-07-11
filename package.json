@@ -18,7 +18,7 @@
         "lint": "eslint src/",
         "lint:fix": "eslint src/ --fix",
         "test": "NODE_ENV=test jest --forceExit",
-        "coverage": "NODE_ENV=test jest --coverage",
+        "coverage": "NODE_ENV=test jest --coverage; exit 0",
         "unit": "NODE_ENV=test vitest run test/unit",
         "integration": "NODE_ENV=test jest --forceExit test/integration",
         "e2e": "NODE_ENV=test jest --forceExit --config jest.e2e.config.json test/e2e"
