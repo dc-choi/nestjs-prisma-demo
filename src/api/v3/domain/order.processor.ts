@@ -2,6 +2,7 @@ import { TransactionHost, Transactional } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { ItemSaleStatus } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
 
 import { Job } from 'bullmq';
@@ -34,10 +35,11 @@ export class OrderProcessor extends WorkerHost {
                 requestedData.map(async (orderItem) => {
                     const { itemId, quantity } = orderItem;
 
-                    // 주문 요청한 상품의 존재 여부 확인, 재고 확인
+                    // 주문 요청한 상품의 존재 여부 확인, 재고 확인, 판매여부 확인
                     const item = await this.txHost.tx.item.findFirst({
                         where: {
                             id: itemId,
+                            itemSaleStatus: ItemSaleStatus.ALLOW,
                         },
                     });
                     if (!item) throw new BadRequestException(new NotExistingItem());
