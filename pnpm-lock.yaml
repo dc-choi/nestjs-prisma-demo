@@ -22,7 +22,7 @@ importers:
         version: 2.0.2(@nestjs/axios@4.0.0(@nestjs/common@11.1.3(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.9.0)(rxjs@7.8.2))(@nestjs/common@11.1.3(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.3)(@prisma/client@6.9.0(prisma@6.9.0(typescript@5.8.3))(typescript@5.8.3))(ioredis@5.6.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nestjs-modules/mailer':
         specifier: ^2.0.2
-        version: 2.0.2(@nestjs/common@11.1.3(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.3)(nodemailer@7.0.3)
+        version: 2.0.2(@nestjs/common@11.1.3(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.3)(encoding@0.1.13)(nodemailer@7.0.3)
       '@nestjs/axios':
         specifier: ^4.0.0
         version: 4.0.0(@nestjs/common@11.1.3(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.9.0)(rxjs@7.8.2)
@@ -3327,6 +3327,9 @@ packages:
   encoding-japanese@2.2.0:
     resolution: {integrity: sha512-EuJWwlHPZ1LbADuKTClvHtwbaFn4rOD+dRAbWysqEOXRc2Uui0hJInNJrsdH0c+OhJA4nrCBdSkW4DD5YxAo6A==}
     engines: {node: '>=8.10.0'}
+
+  encoding@0.1.13:
+    resolution: {integrity: sha512-ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A==}
 
   end-of-stream@1.4.4:
     resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
@@ -7578,7 +7581,7 @@ snapshots:
       - sequelize
       - typeorm
 
-  '@nestjs-modules/mailer@2.0.2(@nestjs/common@11.1.3(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.3)(nodemailer@7.0.3)':
+  '@nestjs-modules/mailer@2.0.2(@nestjs/common@11.1.3(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.3)(encoding@0.1.13)(nodemailer@7.0.3)':
     dependencies:
       '@css-inline/css-inline': 0.14.1
       '@nestjs/common': 11.1.3(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -7592,7 +7595,7 @@ snapshots:
       ejs: 3.1.10
       handlebars: 4.7.8
       liquidjs: 10.21.1
-      mjml: 4.15.3
+      mjml: 4.15.3(encoding@0.1.13)
       preview-email: 3.1.0
       pug: 3.0.3
     transitivePeerDependencies:
@@ -9777,6 +9780,11 @@ snapshots:
   encoding-japanese@2.2.0:
     optional: true
 
+  encoding@0.1.13:
+    dependencies:
+      iconv-lite: 0.6.3
+    optional: true
+
   end-of-stream@1.4.4:
     dependencies:
       once: 1.4.0
@@ -11118,13 +11126,13 @@ snapshots:
       readable-stream: 2.3.8
       setimmediate: 1.0.5
 
-  juice@10.0.1:
+  juice@10.0.1(encoding@0.1.13):
     dependencies:
       cheerio: 1.0.0-rc.12
       commander: 6.2.1
       mensch: 0.3.4
       slick: 1.12.2
-      web-resource-inliner: 6.0.1
+      web-resource-inliner: 6.0.1(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
@@ -11395,43 +11403,43 @@ snapshots:
 
   minipass@7.1.2: {}
 
-  mjml-accordion@4.15.3:
+  mjml-accordion@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-body@4.15.3:
+  mjml-body@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-button@4.15.3:
+  mjml-button@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-carousel@4.15.3:
+  mjml-carousel@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-cli@4.15.3:
+  mjml-cli@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       chokidar: 3.6.0
@@ -11440,8 +11448,8 @@ snapshots:
       js-beautify: 1.15.4
       lodash: 4.17.21
       minimatch: 9.0.5
-      mjml-core: 4.15.3
-      mjml-migrate: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
+      mjml-migrate: 4.15.3(encoding@0.1.13)
       mjml-parser-xml: 4.15.3
       mjml-validator: 4.15.3
       yargs: 17.7.2
@@ -11449,156 +11457,156 @@ snapshots:
       - encoding
     optional: true
 
-  mjml-column@4.15.3:
+  mjml-column@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-core@4.15.3:
+  mjml-core@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       cheerio: 1.0.0-rc.12
       detect-node: 2.1.0
       html-minifier: 4.0.0
       js-beautify: 1.15.4
-      juice: 10.0.1
+      juice: 10.0.1(encoding@0.1.13)
       lodash: 4.17.21
-      mjml-migrate: 4.15.3
+      mjml-migrate: 4.15.3(encoding@0.1.13)
       mjml-parser-xml: 4.15.3
       mjml-validator: 4.15.3
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-divider@4.15.3:
+  mjml-divider@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-group@4.15.3:
+  mjml-group@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-head-attributes@4.15.3:
+  mjml-head-attributes@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-head-breakpoint@4.15.3:
+  mjml-head-breakpoint@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-head-font@4.15.3:
+  mjml-head-font@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-head-html-attributes@4.15.3:
+  mjml-head-html-attributes@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-head-preview@4.15.3:
+  mjml-head-preview@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-head-style@4.15.3:
+  mjml-head-style@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-head-title@4.15.3:
+  mjml-head-title@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-head@4.15.3:
+  mjml-head@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-hero@4.15.3:
+  mjml-hero@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-image@4.15.3:
+  mjml-image@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-migrate@4.15.3:
+  mjml-migrate@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       js-beautify: 1.15.4
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
       mjml-parser-xml: 4.15.3
       yargs: 17.7.2
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-navbar@4.15.3:
+  mjml-navbar@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
@@ -11611,88 +11619,88 @@ snapshots:
       lodash: 4.17.21
     optional: true
 
-  mjml-preset-core@4.15.3:
+  mjml-preset-core@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
-      mjml-accordion: 4.15.3
-      mjml-body: 4.15.3
-      mjml-button: 4.15.3
-      mjml-carousel: 4.15.3
-      mjml-column: 4.15.3
-      mjml-divider: 4.15.3
-      mjml-group: 4.15.3
-      mjml-head: 4.15.3
-      mjml-head-attributes: 4.15.3
-      mjml-head-breakpoint: 4.15.3
-      mjml-head-font: 4.15.3
-      mjml-head-html-attributes: 4.15.3
-      mjml-head-preview: 4.15.3
-      mjml-head-style: 4.15.3
-      mjml-head-title: 4.15.3
-      mjml-hero: 4.15.3
-      mjml-image: 4.15.3
-      mjml-navbar: 4.15.3
-      mjml-raw: 4.15.3
-      mjml-section: 4.15.3
-      mjml-social: 4.15.3
-      mjml-spacer: 4.15.3
-      mjml-table: 4.15.3
-      mjml-text: 4.15.3
-      mjml-wrapper: 4.15.3
+      mjml-accordion: 4.15.3(encoding@0.1.13)
+      mjml-body: 4.15.3(encoding@0.1.13)
+      mjml-button: 4.15.3(encoding@0.1.13)
+      mjml-carousel: 4.15.3(encoding@0.1.13)
+      mjml-column: 4.15.3(encoding@0.1.13)
+      mjml-divider: 4.15.3(encoding@0.1.13)
+      mjml-group: 4.15.3(encoding@0.1.13)
+      mjml-head: 4.15.3(encoding@0.1.13)
+      mjml-head-attributes: 4.15.3(encoding@0.1.13)
+      mjml-head-breakpoint: 4.15.3(encoding@0.1.13)
+      mjml-head-font: 4.15.3(encoding@0.1.13)
+      mjml-head-html-attributes: 4.15.3(encoding@0.1.13)
+      mjml-head-preview: 4.15.3(encoding@0.1.13)
+      mjml-head-style: 4.15.3(encoding@0.1.13)
+      mjml-head-title: 4.15.3(encoding@0.1.13)
+      mjml-hero: 4.15.3(encoding@0.1.13)
+      mjml-image: 4.15.3(encoding@0.1.13)
+      mjml-navbar: 4.15.3(encoding@0.1.13)
+      mjml-raw: 4.15.3(encoding@0.1.13)
+      mjml-section: 4.15.3(encoding@0.1.13)
+      mjml-social: 4.15.3(encoding@0.1.13)
+      mjml-spacer: 4.15.3(encoding@0.1.13)
+      mjml-table: 4.15.3(encoding@0.1.13)
+      mjml-text: 4.15.3(encoding@0.1.13)
+      mjml-wrapper: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-raw@4.15.3:
+  mjml-raw@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-section@4.15.3:
+  mjml-section@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-social@4.15.3:
+  mjml-social@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-spacer@4.15.3:
+  mjml-spacer@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-table@4.15.3:
+  mjml-table@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml-text@4.15.3:
+  mjml-text@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
@@ -11702,23 +11710,23 @@ snapshots:
       '@babel/runtime': 7.27.6
     optional: true
 
-  mjml-wrapper@4.15.3:
+  mjml-wrapper@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
       lodash: 4.17.21
-      mjml-core: 4.15.3
-      mjml-section: 4.15.3
+      mjml-core: 4.15.3(encoding@0.1.13)
+      mjml-section: 4.15.3(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     optional: true
 
-  mjml@4.15.3:
+  mjml@4.15.3(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.27.6
-      mjml-cli: 4.15.3
-      mjml-core: 4.15.3
-      mjml-migrate: 4.15.3
-      mjml-preset-core: 4.15.3
+      mjml-cli: 4.15.3(encoding@0.1.13)
+      mjml-core: 4.15.3(encoding@0.1.13)
+      mjml-migrate: 4.15.3(encoding@0.1.13)
+      mjml-preset-core: 4.15.3(encoding@0.1.13)
       mjml-validator: 4.15.3
     transitivePeerDependencies:
       - encoding
@@ -11799,9 +11807,11 @@ snapshots:
     dependencies:
       lodash: 4.17.21
 
-  node-fetch@2.7.0:
+  node-fetch@2.7.0(encoding@0.1.13):
     dependencies:
       whatwg-url: 5.0.0
+    optionalDependencies:
+      encoding: 0.1.13
     optional: true
 
   node-gyp-build-optional-packages@5.2.2:
@@ -13078,13 +13088,13 @@ snapshots:
     dependencies:
       defaults: 1.0.4
 
-  web-resource-inliner@6.0.1:
+  web-resource-inliner@6.0.1(encoding@0.1.13):
     dependencies:
       ansi-colors: 4.1.3
       escape-goat: 3.0.0
       htmlparser2: 5.0.1
       mime: 2.6.0
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
       valid-data-url: 3.0.1
     transitivePeerDependencies:
       - encoding
