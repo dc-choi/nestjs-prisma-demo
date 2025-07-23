@@ -3,6 +3,12 @@ export interface EnvConfig {
 
     DATABASE_URL: string;
 
+    MYSQL_HOST: string;
+    MYSQL_PORT: number;
+    MYSQL_USER: string;
+    MYSQL_PASSWORD: string;
+    MYSQL_DATABASE: string;
+
     SECRET: string;
 
     ENV: string;

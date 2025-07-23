@@ -1,12 +1,16 @@
-import { INestApplication, Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { INestApplication, Inject, Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PrismaClient } from '@prisma/client';
+
+import { PRISMA_ADAPTER } from './mysql-adapter';
 
 import { sqlLogger } from '~/global/config/logger/winston.config';
 
 @Injectable()
 export class Repository extends PrismaClient implements OnModuleInit, OnModuleDestroy {
-    constructor() {
+    constructor(@Inject(PRISMA_ADAPTER) adapter: PrismaMariaDb) {
         super({
+            adapter,
             log: [{ emit: 'event', level: 'query' }],
             transactionOptions: {
                 timeout: 5000,
