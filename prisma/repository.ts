@@ -2,7 +2,7 @@ import { INestApplication, Inject, Injectable, OnModuleDestroy, OnModuleInit } f
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PrismaClient } from '@prisma/client';
 
-import { PRISMA_ADAPTER } from './mysql-adapter';
+import { PRISMA_ADAPTER } from './mysql.adapter';
 
 import { sqlLogger } from '~/global/config/logger/winston.config';
 

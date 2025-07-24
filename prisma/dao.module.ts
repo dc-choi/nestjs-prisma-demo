@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 
-import { MysqlAdapterProvider } from './mysql-adapter';
+import { MysqlAdapterProvider } from './mysql.adapter';
 import { Repository } from './repository';
 
 @Global()
