@@ -19,7 +19,7 @@ export class OrderV3Service {
     ) {}
 
     @DistributedLock((_: JwtPayload, orderV3RequestDto: OrderV3RequestDto) => {
-        const itemIds = orderV3RequestDto.data.map((obj) => obj.itemId).sort();
+        const itemIds = orderV3RequestDto.data.map((obj) => obj.itemId).sort((a, b) => Number(a - b));
         return itemIds.map((id) => `lock:item:${id}`);
     })
     async order(jwtPayload: JwtPayload, orderV3RequestDto: OrderV3RequestDto) {
