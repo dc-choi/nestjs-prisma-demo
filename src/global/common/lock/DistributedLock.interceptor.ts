@@ -8,8 +8,8 @@ import { DISTRIBUTED_LOCK_KEY, RED_LOCK } from '~/global/common/lock/Distributed
 @Injectable()
 export class DistributedLockInterceptor implements NestInterceptor {
     constructor(
-        private reflector: Reflector,
-        @Inject(RED_LOCK) private redlock: Redlock
+        private readonly reflector: Reflector,
+        @Inject(RED_LOCK) private readonly redlock: Redlock
     ) {}
 
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> {

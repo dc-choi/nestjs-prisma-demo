@@ -3,7 +3,7 @@ type Task<T> = () => Promise<T>;
 export class PQueue {
     private readonly concurrency: number;
     private activeCount = 0;
-    private queue: (() => void)[] = [];
+    private readonly queue: (() => void)[] = [];
 
     constructor(options: { concurrency: number }) {
         this.concurrency = options.concurrency;
