@@ -8,7 +8,7 @@ import { Decimal } from '@prisma/client/runtime/library';
 import { Job } from 'bullmq';
 import { v7 as uuid } from 'uuid';
 import { OrderedItemInterface } from '~/api/v2/order/domain/interface/orderedItem.interface';
-import { OrderQueueRequest } from '~/api/v3/domain/message/order-queue.message';
+import { OrderQueueRequest } from '~/api/v3/order/domain/message/order-queue.message';
 import { ItemStockShortage, NotExistingItem } from '~/global/common/error/item.error';
 import { OrderServerError } from '~/global/common/error/order.error';
 import { QueueResponse, queueErrorHandler } from '~/global/common/message/queue.message';

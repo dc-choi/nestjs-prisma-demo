@@ -1,8 +1,8 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { OrderV3Service } from '~/api/v3/application/orderV3.service';
-import { OrderV3RequestDto, OrderV3ResponseDto } from '~/api/v3/domain/dto/orderV3.dto';
+import { OrderV3Service } from '~/api/v3/order/application/orderV3.service';
+import { OrderV3RequestDto, OrderV3ResponseDto } from '~/api/v3/order/domain/dto/orderV3.dto';
 import { Jwt } from '~/global/jwt/decorator/jwt.decorator';
 import { CommonGuard } from '~/global/jwt/guard/common.guard';
 import { JwtPayload } from '~/global/jwt/payload/jwt.payload';

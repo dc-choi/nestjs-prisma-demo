@@ -19,8 +19,8 @@ import { AuthModule } from '~/api/v1/auth/auth.module';
 import { MemberModule } from '~/api/v1/member/member.module';
 import { OrderModule } from '~/api/v1/order/order.module';
 import { OrderV2Module } from '~/api/v2/order/orderV2.module';
-import { OrderV3Module } from '~/api/v3/orderV3.module';
-import { RED_LOCK } from '~/global/common/lock/DistributedLock';
+import { OrderV3Module } from '~/api/v3/order/orderV3.module';
+import { DEFAULT_LOCK_BASE_DELAY, DEFAULT_LOCK_MAX_RETRIES, RED_LOCK } from '~/global/common/lock/DistributedLock';
 import { MutexModule } from '~/global/common/lock/mutex.module';
 import { EnvConfig } from '~/global/config/env/env.config';
 import { winstonTransports } from '~/global/config/logger/winston.config';
@@ -104,9 +104,8 @@ import { QueueModule } from '~/infra/queue/queue.module';
             provide: RED_LOCK,
             useFactory: (redis: Redis) => {
                 return new Redlock([redis], {
-                    retryCount: 3,
-                    retryDelay: 200,
-                    retryJitter: 100,
+                    retryCount: DEFAULT_LOCK_MAX_RETRIES,
+                    retryDelay: DEFAULT_LOCK_BASE_DELAY,
                 });
             },
         },

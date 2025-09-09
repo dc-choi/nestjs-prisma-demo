@@ -2,8 +2,8 @@ import { InjectQueue } from '@nestjs/bullmq';
 import { Inject, Injectable } from '@nestjs/common';
 
 import { Queue, QueueEvents } from 'bullmq';
-import { OrderV3RequestDto, OrderV3ResponseDto } from '~/api/v3/domain/dto/orderV3.dto';
-import { OrderQueueRequest } from '~/api/v3/domain/message/order-queue.message';
+import { OrderV3RequestDto, OrderV3ResponseDto } from '~/api/v3/order/domain/dto/orderV3.dto';
+import { OrderQueueRequest } from '~/api/v3/order/domain/message/order-queue.message';
 import { DistributedLock } from '~/global/common/lock/DistributedLock';
 import { QueueResponse, checkQueueMessage } from '~/global/common/message/queue.message';
 import { JwtPayload } from '~/global/jwt/payload/jwt.payload';
