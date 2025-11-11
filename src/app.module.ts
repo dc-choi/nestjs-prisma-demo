@@ -127,6 +127,7 @@ import { QueueModule } from '~/infra/queue/queue.module';
         },
         {
             provide: RED_LOCK,
+            inject: [],
             useFactory: (redis: Redis) => {
                 return new Redlock([redis], {
                     retryCount: DEFAULT_LOCK_MAX_RETRIES,

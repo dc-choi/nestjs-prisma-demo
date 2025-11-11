@@ -19,13 +19,13 @@ interface DistributedLockOptions {
 
 export const DistributedLock = (
     lockKeyFn: (...args: any[]) => string | string[],
-    options: DistributedLockOptions = {}
+    options: DistributedLockOptions = {
+        ttl: DEFAULT_LOCK_TTL,
+        maxRetries: DEFAULT_LOCK_MAX_RETRIES,
+        baseDelay: DEFAULT_LOCK_BASE_DELAY,
+    }
 ) => {
-    const {
-        ttl = DEFAULT_LOCK_TTL,
-        maxRetries = DEFAULT_LOCK_MAX_RETRIES,
-        baseDelay = DEFAULT_LOCK_BASE_DELAY,
-    } = options;
+    const { ttl, maxRetries, baseDelay } = options;
 
     return SetMetadata(DISTRIBUTED_LOCK_KEY, {
         lockKeyFn,

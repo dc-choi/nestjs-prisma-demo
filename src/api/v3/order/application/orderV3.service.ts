@@ -18,10 +18,13 @@ export class OrderV3Service {
         private readonly createOrderEvent: QueueEvents
     ) {}
 
-    @DistributedLock((_: JwtPayload, orderV3RequestDto: OrderV3RequestDto) => {
-        const itemIds = orderV3RequestDto.data.map((obj) => obj.itemId).sort((a, b) => Number(a - b));
-        return itemIds.map((id) => `lock:item:${id}`);
-    })
+    @DistributedLock(
+        (_: JwtPayload, orderV3RequestDto: OrderV3RequestDto) => {
+            const itemIds = orderV3RequestDto.data.map((obj) => obj.itemId).sort((a, b) => Number(a - b));
+            return itemIds.map((id) => `lock:item:${id}`);
+        },
+        { ttl: 1000 }
+    )
     async order(jwtPayload: JwtPayload, orderV3RequestDto: OrderV3RequestDto) {
         const job = await this.orderQueue.add(
             ORDER_QUEUE,
