@@ -2,7 +2,7 @@ import { ClsPluginTransactional } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { RedisModule } from '@nestjs-modules/ioredis';
 import { BullModule } from '@nestjs/bullmq';
-import { Module, ValidationPipe } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 
@@ -28,6 +28,7 @@ import { AllExceptionFilter } from '~/global/filter/all.exception.filter';
 import { DefaultExceptionFilter } from '~/global/filter/default.exception.filter';
 import { HttpLoggingInterceptor } from '~/global/interceptor/http.logging.interceptor';
 import { TokenModule } from '~/global/jwt/token.module';
+import { RequestContextMiddleware } from '~/global/middleware/request-context.middleware';
 import { MailModule } from '~/infra/mail/mail.module';
 import { QueueModule } from '~/infra/queue/queue.module';
 
@@ -140,4 +141,8 @@ import { QueueModule } from '~/infra/queue/queue.module';
     ],
     exports: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(RequestContextMiddleware).forRoutes('*');
+    }
+}

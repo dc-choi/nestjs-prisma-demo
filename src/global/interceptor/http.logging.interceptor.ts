@@ -1,31 +1,44 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
+import { Request } from 'express';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { httpLog } from '~/global/common/logger/channel.logger';
 import { deletePasswordInLog } from '~/global/common/utils/password';
-import { infoLogger } from '~/global/config/logger/winston.config';
+import { EnvConfig } from '~/global/config/env/env.config';
 
 @Injectable()
 export class HttpLoggingInterceptor implements NestInterceptor {
-    intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-        const request = context.switchToHttp().getRequest();
-        const version = request.httpVersion;
-        const origin = request._parsedUrl;
-        const method = request.method;
-        const url = request.url;
-        const params = request.params;
-        const query = request.query;
-        const body = request.body;
+    constructor(private readonly configService: ConfigService<EnvConfig, true>) {}
 
-        infoLogger.log(
-            `HTTP REQUEST:\nversion: ${version}\norigin: ${JSON.stringify(origin)}\nmethod: ${method}\nurl: ${url}\nparams: ${JSON.stringify(params)}\nquery: ${JSON.stringify(query)}\nbody: ${JSON.stringify(deletePasswordInLog(body))}`
-        );
+    intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+        const env = this.configService.get<string>('ENV');
+        const request = context.switchToHttp().getRequest<Request>();
+        const { httpVersion: version, originalUrl: origin, method, url, params, query, body } = request;
+
+        httpLog.log({
+            type: 'HTTP REQUEST',
+            env,
+            version,
+            origin,
+            method,
+            url,
+            params,
+            query,
+            body: deletePasswordInLog(body),
+        });
 
         return next.handle().pipe(
             tap((response) => {
-                infoLogger.log(
-                    `HTTP RESPONSE:\norigin: ${JSON.stringify(origin)}\nmethod: ${method}\nurl: ${url}\nresponse: ${JSON.stringify(response)}`
-                );
+                httpLog.log({
+                    type: 'HTTP RESPONSE',
+                    env,
+                    origin,
+                    method,
+                    url,
+                    response,
+                });
             })
         );
     }

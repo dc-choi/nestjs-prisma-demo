@@ -1,12 +1,17 @@
 import { MailerService } from '@nestjs-modules/mailer';
+import { ConfigService } from '@nestjs/config';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 
 import { SignupEvent } from '~/api/v1/member/application/event/signup.event';
-import { verboseLogger } from '~/global/config/logger/winston.config';
+import { verboseLog } from '~/global/common/logger/channel.logger';
+import { EnvConfig } from '~/global/config/env/env.config';
 
 @EventsHandler(SignupEvent)
 export class SignupMailHandler implements IEventHandler<SignupEvent> {
-    constructor(private readonly mailerService: MailerService) {}
+    constructor(
+        private readonly mailerService: MailerService,
+        private readonly config: ConfigService<EnvConfig, true>
+    ) {}
 
     handle(event: SignupEvent): void {
         const { email, name, phone, to } = event;
@@ -23,7 +28,12 @@ export class SignupMailHandler implements IEventHandler<SignupEvent> {
                 },
             })
             .catch((e) => {
-                verboseLogger.error(`[mailerService.sendMail] : ${e}`);
+                verboseLog.log({
+                    type: 'SIGNUP_MAIL_ERROR',
+                    env: this.config.get<string>('ENV'),
+                    stack: e.stack,
+                    message: `SIGNUP_MAIL_ERROR - ${e.message}`,
+                });
             });
     }
 }
