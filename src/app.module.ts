@@ -2,9 +2,9 @@ import { ClsPluginTransactional } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { RedisModule } from '@nestjs-modules/ioredis';
 import { BullModule } from '@nestjs/bullmq';
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 
 import { DistributedLockInterceptor } from './global/common/lock/DistributedLock.interceptor';
 
@@ -24,6 +24,9 @@ import { DEFAULT_LOCK_BASE_DELAY, DEFAULT_LOCK_MAX_RETRIES, RED_LOCK } from '~/g
 import { MutexModule } from '~/global/common/lock/mutex.module';
 import { EnvConfig } from '~/global/config/env/env.config';
 import { winstonTransports } from '~/global/config/logger/winston.config';
+import { AllExceptionFilter } from '~/global/filter/all.exception.filter';
+import { DefaultExceptionFilter } from '~/global/filter/default.exception.filter';
+import { HttpLoggingInterceptor } from '~/global/interceptor/http.logging.interceptor';
 import { TokenModule } from '~/global/jwt/token.module';
 import { MailModule } from '~/infra/mail/mail.module';
 import { QueueModule } from '~/infra/queue/queue.module';
@@ -100,6 +103,27 @@ import { QueueModule } from '~/infra/queue/queue.module';
         OrderV3Module,
     ],
     providers: [
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: HttpLoggingInterceptor,
+        },
+        {
+            provide: APP_PIPE,
+            useFactory: () =>
+                new ValidationPipe({
+                    transform: true,
+                    stopAtFirstError: true,
+                    // whitelist: true, forbidNonWhitelisted: true, 등 필요 옵션 추가 가능
+                }),
+        },
+        {
+            provide: APP_FILTER,
+            useClass: AllExceptionFilter,
+        },
+        {
+            provide: APP_FILTER,
+            useClass: DefaultExceptionFilter,
+        },
         {
             provide: RED_LOCK,
             useFactory: (redis: Redis) => {
