@@ -23,7 +23,7 @@ export class FindAllMemberResponseDto {
     @ApiProperty({ description: '회원 가입 시간', example: '2021-09-01T00:00:00' })
     createdAt: Date;
 
-    constructor(data?: Member) {
+    constructor(data: Pick<Member, 'id' | 'name' | 'email' | 'phone' | 'role' | 'lastLoginAt' | 'createdAt'>) {
         if (data) {
             this.id = data?.id;
             this.name = data?.name;
@@ -35,7 +35,9 @@ export class FindAllMemberResponseDto {
         }
     }
 
-    public static toDto(data: Member[]) {
+    public static toDto(
+        data: Pick<Member, 'id' | 'name' | 'email' | 'phone' | 'role' | 'lastLoginAt' | 'createdAt'>[]
+    ) {
         return data.map((item) => new FindAllMemberResponseDto(item));
     }
 }

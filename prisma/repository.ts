@@ -1,15 +1,20 @@
-import { INestApplication, Inject, Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, OnApplicationBootstrap, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { Prisma, PrismaClient } from '@prisma/client';
 
+import type { DB } from './generated/types';
 import { PRISMA_ADAPTER } from './mysql.adapter';
 
+import { Kysely, MysqlAdapter, MysqlIntrospector, MysqlQueryCompiler } from 'kysely';
+import kyselyExtension from 'prisma-extension-kysely';
 import { sqlLog } from '~/global/common/logger/channel.logger';
 import { EnvConfig } from '~/global/config/env/env.config';
 
 @Injectable()
-export class Repository extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+export class Repository extends PrismaClient implements OnModuleInit, OnApplicationBootstrap, OnModuleDestroy {
+    public query: ReturnType<PrismaClient['$extends']> & { $kysely: Kysely<DB> };
+
     constructor(
         @Inject(PRISMA_ADAPTER) adapter: PrismaMariaDb,
         private readonly config: ConfigService<EnvConfig, true>
@@ -20,6 +25,7 @@ export class Repository extends PrismaClient implements OnModuleInit, OnModuleDe
             transactionOptions: {
                 timeout: 5000,
                 maxWait: 10000,
+                isolationLevel: 'RepeatableRead',
             },
         });
 
@@ -73,13 +79,23 @@ export class Repository extends PrismaClient implements OnModuleInit, OnModuleDe
         });
     }
 
-    async onModuleDestroy() {
-        await this.$disconnect();
+    onApplicationBootstrap() {
+        this.query = this.$extends(
+            kyselyExtension({
+                kysely: (driver) =>
+                    new Kysely<DB>({
+                        dialect: {
+                            createDriver: () => driver,
+                            createAdapter: () => new MysqlAdapter(),
+                            createIntrospector: (db) => new MysqlIntrospector(db),
+                            createQueryCompiler: () => new MysqlQueryCompiler(),
+                        },
+                    }),
+            })
+        );
     }
 
-    async enableShutdownHooks(app: INestApplication) {
-        process.on('beforeExit', async () => {
-            await app.close();
-        });
+    async onModuleDestroy() {
+        await this.$disconnect();
     }
 }

@@ -6,6 +6,10 @@ generator client {
   previewFeatures = ["queryCompiler", "driverAdapters", "relationJoins"]
 }
 
+generator kysely {
+  provider = "prisma-kysely"
+}
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")

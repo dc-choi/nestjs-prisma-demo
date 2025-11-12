@@ -51,6 +51,34 @@ export class MemberService {
     }
 
     async findAll() {
-        return FindAllMemberResponseDto.toDto(await this.repository.member.findMany());
+        return FindAllMemberResponseDto.toDto(
+            await this.repository.query.$kysely
+                .selectFrom('members as m')
+                // .leftJoin('items as i', 'm.id', 'i.member_id')
+                // .leftJoin('orders as o', 'm.id', 'o.member_id')
+                .select([
+                    'm.id as id',
+                    'm.name as name',
+                    'm.email as email',
+                    'm.phone as phone',
+                    'm.role as role',
+                    'm.last_login_at as lastLoginAt',
+                    'm.created_at as createdAt',
+                ])
+                // .forUpdate() // lock도 가능
+                .where('m.deleted_at', 'is', null)
+                .execute()
+                .then((results) =>
+                    results.map(({ id, name, email, phone, role, lastLoginAt, createdAt }) => ({
+                        id: BigInt(id),
+                        name,
+                        email,
+                        phone,
+                        role,
+                        lastLoginAt,
+                        createdAt,
+                    }))
+                )
+        );
     }
 }

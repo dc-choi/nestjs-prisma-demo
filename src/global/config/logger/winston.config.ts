@@ -16,7 +16,7 @@ const addRequestId = winston.format((info) => {
 
 export const verboseLogger = WinstonModule.createLogger({
     level: 'verbose',
-    format: winston.format.combine(winston.format.timestamp(), utilities.format.nestLike('Earlivery')),
+    format: winston.format.combine(winston.format.timestamp(), utilities.format.nestLike('My-Own-App')),
     transports: [
         new winstonDaily({
             level: 'verbose',
@@ -39,7 +39,7 @@ export const verboseLogger = WinstonModule.createLogger({
 
 export const sqlLogger = WinstonModule.createLogger({
     level: 'verbose',
-    format: winston.format.combine(winston.format.timestamp(), utilities.format.nestLike('Earlivery')),
+    format: winston.format.combine(winston.format.timestamp(), utilities.format.nestLike('My-Own-App')),
     transports: [
         new winstonDaily({
             level: 'verbose',
@@ -62,7 +62,7 @@ export const sqlLogger = WinstonModule.createLogger({
 
 export const httpLogger = WinstonModule.createLogger({
     level: 'http',
-    format: winston.format.combine(winston.format.timestamp(), utilities.format.nestLike('Earlivery')),
+    format: winston.format.combine(winston.format.timestamp(), utilities.format.nestLike('My-Own-App')),
     transports: [
         new winstonDaily({
             level: 'http',
@@ -86,7 +86,7 @@ export const httpLogger = WinstonModule.createLogger({
 export const winstonTransports = [
     new winston.transports.Console({
         level: 'debug',
-        format: winston.format.combine(winston.format.timestamp(), utilities.format.nestLike('Earlivery')),
+        format: winston.format.combine(winston.format.timestamp(), utilities.format.nestLike('My-Own-App')),
     }),
     new winstonDaily({
         level: 'error',

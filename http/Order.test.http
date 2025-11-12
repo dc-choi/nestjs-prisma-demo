@@ -9,6 +9,20 @@ Content-Type: application/json
 
 > {% client.global.set("accessToken", response.body.accessToken); %}
 
+### order-v1
+POST localhost:3000/api/v1/orders
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "data": [
+    {
+      "itemId": 18,
+      "quantity": 2
+    }
+  ]
+}
+
 ### order
 POST localhost:3000/api/v3/orders
 Content-Type: application/json

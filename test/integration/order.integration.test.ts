@@ -22,11 +22,20 @@ describe('order test', () => {
             imports: [
                 ConfigModule.forRoot({
                     isGlobal: true,
-                    envFilePath: '.env.test',
+                    envFilePath: '.env',
                     validationSchema: Joi.object({
                         DATABASE_URL: Joi.string().required(),
+                        MYSQL_HOST: Joi.string().required(),
+                        MYSQL_PORT: Joi.number().required(),
+                        MYSQL_USER: Joi.string().required(),
+                        MYSQL_PASSWORD: Joi.string().required(),
+                        MYSQL_DATABASE: Joi.string().required(),
                         SECRET: Joi.string().required(),
                         ENV: Joi.string().required(),
+                        MAIL_USER: Joi.string().required(),
+                        MAIL_PASSWORD: Joi.string().required(),
+                        MAIL_SIGNUP_ALERT_USER: Joi.string().required(),
+                        REDIS_URL: Joi.string().required(),
                     }),
                 }),
                 ClsModule.forRoot({
