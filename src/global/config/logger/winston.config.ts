@@ -1,13 +1,14 @@
 import { WinstonModule, utilities } from 'nest-winston';
+import { ClsServiceManager } from 'nestjs-cls';
 import winston from 'winston';
 import winstonDaily from 'winston-daily-rotate-file';
-import { RequestContext } from '~/global/context/request-context';
 
 /**
  * requestId를 로그에 자동으로 추가하는 Winston format
  */
 const addRequestId = winston.format((info) => {
-    const requestId = RequestContext.getRequestId();
+    const cls = ClsServiceManager.getClsService();
+    const requestId = cls.getId();
     if (requestId) {
         info.requestId = requestId;
     }

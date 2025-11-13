@@ -141,6 +141,57 @@ RedisModule.forRootAsync({
 - **독립적인 여러 Redis 인스턴스**를 따로 설정해야 Redlock의 분산 락 목적 달성 가능
 - 단순한 사용 사례에서는 **단일 인스턴스**가 더 효율적
 
+## 요청 단위 추적 (Request Tracing)
+
+### ClsModule 기반 요청 컨텍스트 관리 (nestjs-cls)
+AsyncLocalStorage 기반으로 요청별 컨텍스트 자동 관리
+
+파일: src/app.module.ts:133 (ClsModule.forRoot 설정)
+
+### 트랜잭션 컨텍스트와 requestId 관리 통합 
+- Middleware로 자동 추적
+- ClsModule의 middleware.mount: true 설정으로 자동 활성화
+- AppModule에서 전역 적용 (별도 미들웨어 불필요)
+
+### x-request-id 헤더 처리
+- 요청 헤더에 x-request-id가 있으면 해당 값 사용
+- 없으면 uuid.v7()로 새로 생성
+
+### 응답 헤더에 x-request-id 자동 추가
+- requestId 자동 포함
+- Winston 설정에서 ClsServiceManager.getClsService().getId() 사용
+- 모든 로그 라인에 requestId 필드 자동 추가
+- HTTP 요청 생명주기 동안 자동 전파
+
+### 비동기 컨텍스트 주의사항
+- HTTP 요청: ClsModule Middleware에 의해 자동으로 컨텍스트 생성 및 전파
+- 워커/크론/비동기 작업: 컨텍스트가 자동 전파되지 않음
+- 수동 설정 방법 (두 가지 방식):
+    ```ts
+    import { ClsService } from "nestjs-cls";
+    import { v7 } from "uuid";
+    
+    constructor(private readonly cls: ClsService) {}
+    
+    // 방법 1: enterWith() - 현재 컨텍스트에 즉시 진입 (동기/비동기 모두 사용 가능)
+    async someJob() {
+      this.cls.enterWith({ CLS_ID: v7() }); // requestId 설정
+      // 이후 모든 로그에 requestId가 자동 포함됨
+      await this.doWork();
+      // 작업 완료 후에도 requestId 유지됨
+    }
+    
+    // 방법 2: run() - 콜백 범위 내에서만 컨텍스트 격리
+    async anotherJob() {
+      await this.cls.run(async () => {
+        this.cls.set("CLS_ID", v7()); // requestId 설정
+        // 이 콜백 내에서만 requestId가 유효
+        await this.doWork();
+      });
+      // 콜백 외부에서는 requestId 접근 불가
+    }
+    ```
+
 ## tips
 - app도 컨테이너, db도 컨테이너로 실행하면 다음 설정처럼 해야함.
 - host.docker.internal
