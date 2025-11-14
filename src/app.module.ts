@@ -14,7 +14,7 @@ import Joi from 'joi';
 import { WinstonModule } from 'nest-winston';
 import { ClsModule } from 'nestjs-cls';
 import { DaoModule } from 'prisma/dao.module';
-import { Repository } from 'prisma/repository';
+import { REPOSITORY } from 'prisma/repository';
 import Redlock from 'redlock';
 import { v7 } from 'uuid';
 import { AuthModule } from '~/api/v1/auth/auth.module';
@@ -83,7 +83,7 @@ import { QueueModule } from '~/infra/queue/queue.module';
             plugins: [
                 new ClsPluginTransactional({
                     adapter: new TransactionalAdapterPrisma({
-                        prismaInjectionToken: Repository,
+                        prismaInjectionToken: REPOSITORY,
                     }),
                 }),
             ],

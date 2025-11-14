@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EventBus } from '@nestjs/cqrs';
 
@@ -6,7 +6,7 @@ import { FindAllMemberResponseDto } from '../domain/dto/findAllMember.dto';
 import { SignupRequestDto, SignupResponseDto } from '../domain/dto/signup.dto';
 import { SignupEvent } from './event/signup.event';
 
-import { Repository } from 'prisma/repository';
+import { REPOSITORY, Repository } from 'prisma/repository';
 import { IdBlackList } from '~/api/v1/member/domain/idBlackList';
 import { MemberDomain } from '~/api/v1/member/domain/member.domain';
 import { ExistingMember, InvalidMember } from '~/global/common/error/member.error';
@@ -15,7 +15,7 @@ import { EnvConfig } from '~/global/config/env/env.config';
 @Injectable()
 export class MemberService {
     constructor(
-        private readonly repository: Repository,
+        @Inject(REPOSITORY) private readonly repository: Repository,
         private readonly config: ConfigService<EnvConfig, true>,
         private readonly eventBus: EventBus
     ) {}
@@ -52,7 +52,7 @@ export class MemberService {
 
     async findAll() {
         return FindAllMemberResponseDto.toDto(
-            await this.repository.query.$kysely
+            await this.repository.$kysely
                 .selectFrom('members as m')
                 // .leftJoin('items as i', 'm.id', 'i.member_id')
                 // .leftJoin('orders as o', 'm.id', 'o.member_id')

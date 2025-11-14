@@ -1,11 +1,21 @@
-import { Global, Module } from '@nestjs/common';
+import { Global, Inject, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 
 import { MysqlAdapterProvider } from './mysql.adapter';
-import { Repository } from './repository';
+import { REPOSITORY, Repository, RepositoryProvider } from './repository';
 
 @Global()
 @Module({
-    providers: [Repository, MysqlAdapterProvider],
-    exports: [Repository],
+    providers: [RepositoryProvider, MysqlAdapterProvider],
+    exports: [REPOSITORY],
 })
-export class DaoModule {}
+export class DaoModule implements OnModuleInit, OnModuleDestroy {
+    constructor(@Inject(REPOSITORY) private readonly repository: Repository) {}
+
+    async onModuleInit() {
+        await this.repository.$connect();
+    }
+
+    async onModuleDestroy() {
+        await this.repository.$disconnect();
+    }
+}

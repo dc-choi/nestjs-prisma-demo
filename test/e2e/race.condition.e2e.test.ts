@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ItemSaleStatus } from '@prisma/client';
 
-import { Repository } from 'prisma/repository';
+import { REPOSITORY, Repository } from 'prisma/repository';
 import request from 'supertest';
 import { AppModule } from '~/app.module';
 import { PQueue } from '~/global/common/utils/PQueue';
@@ -21,7 +21,7 @@ describe('race condition test', () => {
             imports: [AppModule],
         }).compile();
 
-        repository = module.get<Repository>(Repository);
+        repository = module.get<Repository>(REPOSITORY);
 
         app = module.createNestApplication();
         app.setGlobalPrefix('api');

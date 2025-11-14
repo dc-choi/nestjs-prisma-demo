@@ -7,7 +7,7 @@ import { ItemSaleStatus, MemberRole } from '@prisma/client';
 import Joi from 'joi';
 import { ClsModule } from 'nestjs-cls';
 import { DaoModule } from 'prisma/dao.module';
-import { Repository } from 'prisma/repository';
+import { REPOSITORY, Repository } from 'prisma/repository';
 import { OrderService } from '~/api/v1/order/application/order.service';
 import { OrderRequestDto } from '~/api/v1/order/domain/dto/order.dto';
 import { OrderModule } from '~/api/v1/order/order.module';
@@ -44,7 +44,7 @@ describe('order test', () => {
                     plugins: [
                         new ClsPluginTransactional({
                             adapter: new TransactionalAdapterPrisma({
-                                prismaInjectionToken: Repository,
+                                prismaInjectionToken: REPOSITORY,
                             }),
                         }),
                     ],
@@ -55,7 +55,7 @@ describe('order test', () => {
         }).compile();
 
         orderService = module.get<OrderService>(OrderService);
-        repository = module.get<Repository>(Repository);
+        repository = module.get<Repository>(REPOSITORY);
     });
 
     beforeEach(async () => {
