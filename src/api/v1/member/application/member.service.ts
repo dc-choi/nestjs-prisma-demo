@@ -27,7 +27,7 @@ export class MemberService {
 
         if (IdBlackList.includes(name)) throw new BadRequestException(new InvalidMember());
 
-        const findMember = await this.repository.member.findFirst({
+        const findMember = await this.repository.$replica().member.findFirst({
             where: {
                 name,
                 email,
@@ -35,7 +35,7 @@ export class MemberService {
         });
         if (findMember) throw new ConflictException(new ExistingMember());
 
-        const newMember = await this.repository.member.create({
+        const newMember = await this.repository.$primary().member.create({
             data: {
                 name,
                 email,
@@ -52,8 +52,9 @@ export class MemberService {
 
     async findAll() {
         return FindAllMemberResponseDto.toDto(
-            await this.repository.$kysely
-                .selectFrom('members as m')
+            await this.repository
+                .$replica()
+                .$kysely.selectFrom('members as m')
                 // .leftJoin('items as i', 'm.id', 'i.member_id')
                 // .leftJoin('orders as o', 'm.id', 'o.member_id')
                 .select([
@@ -69,15 +70,14 @@ export class MemberService {
                 .where('m.deletedAt', 'is', null)
                 .execute()
                 .then((results) =>
-                    results.map(({ id, name, email, phone, role, lastLoginAt, createdAt }) => ({
-                        id: BigInt(id),
-                        name,
-                        email,
-                        phone,
-                        role,
-                        lastLoginAt,
-                        createdAt,
-                    }))
+                    results.map((row) => {
+                        const { id } = row;
+
+                        return {
+                            ...row,
+                            id: BigInt(id),
+                        };
+                    })
                 )
         );
     }

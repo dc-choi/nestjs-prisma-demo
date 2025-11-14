@@ -3,7 +3,8 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["queryCompiler", "driverAdapters", "relationJoins"]
+  engineType      = "client"
+  previewFeatures = ["relationJoins"]
 }
 
 generator kysely {

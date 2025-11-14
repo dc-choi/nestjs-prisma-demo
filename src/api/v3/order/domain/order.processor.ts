@@ -1,9 +1,9 @@
-import { TransactionHost, Transactional } from '@nestjs-cls/transactional';
-import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Inject, InternalServerErrorException } from '@nestjs/common';
 import { ItemSaleStatus } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
+
+import { REPOSITORY, Repository } from '../../../../../prisma/repository';
 
 import { Job } from 'bullmq';
 import { v7 as uuid } from 'uuid';
@@ -16,11 +16,10 @@ import { ORDER_QUEUE } from '~/infra/queue/queue.symbol';
 
 @Processor(ORDER_QUEUE)
 export class OrderProcessor extends WorkerHost {
-    constructor(private readonly txHost: TransactionHost<TransactionalAdapterPrisma>) {
+    constructor(@Inject(REPOSITORY) private readonly repository: Repository) {
         super();
     }
 
-    @Transactional<TransactionalAdapterPrisma>()
     async process(job: Job<OrderQueueRequest, QueueResponse, string>): Promise<QueueResponse> {
         const { jwt, payload } = job.data;
 
@@ -31,12 +30,12 @@ export class OrderProcessor extends WorkerHost {
         let totalPrice = new Decimal(0);
 
         try {
-            await Promise.all(
-                requestedData.map(async (orderItem) => {
+            const id = await this.repository.$transaction(async (tx) => {
+                for (const orderItem of requestedData) {
                     const { itemId, quantity } = orderItem;
 
                     // 주문 요청한 상품의 존재 여부 확인, 재고 확인, 판매여부 확인
-                    const item = await this.txHost.tx.item.findFirst({
+                    const item = await tx.$primary().item.findFirst({
                         where: {
                             id: itemId,
                             itemSaleStatus: ItemSaleStatus.ALLOW,
@@ -51,7 +50,7 @@ export class OrderProcessor extends WorkerHost {
                     items.push({ itemId, quantity, itemPrice });
 
                     // 주문 요청한 상품의 재고 차감
-                    await this.txHost.tx.item.update({
+                    await tx.item.update({
                         where: {
                             id: itemId,
                         },
@@ -61,26 +60,28 @@ export class OrderProcessor extends WorkerHost {
                             },
                         },
                     });
-                })
-            );
+                }
 
-            // 주문 생성
-            const { id } = await this.txHost.tx.order.create({
-                data: {
-                    orderNumber: uuid(),
-                    totalPrice,
-                    memberId,
-                },
+                // 주문 생성
+                const { id } = await tx.order.create({
+                    data: {
+                        orderNumber: uuid(),
+                        totalPrice,
+                        memberId,
+                    },
+                });
+                const { count } = await tx.orderItem.createMany({
+                    data: items.map(({ itemId, quantity, itemPrice }) => ({
+                        orderId: id,
+                        itemId,
+                        quantity,
+                        price: itemPrice,
+                    })),
+                });
+                if (items.length !== count) throw new InternalServerErrorException(new OrderServerError());
+
+                return id;
             });
-            const { count } = await this.txHost.tx.orderItem.createMany({
-                data: items.map(({ itemId, quantity, itemPrice }) => ({
-                    orderId: id,
-                    itemId,
-                    quantity,
-                    price: itemPrice,
-                })),
-            });
-            if (items.length !== count) throw new InternalServerErrorException(new OrderServerError());
 
             return {
                 success: true,

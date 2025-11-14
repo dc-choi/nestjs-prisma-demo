@@ -24,7 +24,7 @@ const createTypedLogger = <T>(
 
 // SQL (Prisma) channel
 export interface PrismaQueryLog {
-    type: 'PRISMA QUERY';
+    type: 'PRISMA QUERY' | 'PRISMA REPLICA QUERY';
     env: string;
     timestamp: Date;
     query: string;

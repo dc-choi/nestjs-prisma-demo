@@ -24,7 +24,7 @@ export class AuthService {
         const salt = this.config.get<string>('SECRET');
         const { email, password } = loginRequestDto;
 
-        const findMember = await this.repository.member.findFirst({
+        const findMember = await this.repository.$replica().member.findFirst({
             where: {
                 email,
                 hashedPassword: MemberDomain.generateHashedPassword(password, salt),
@@ -37,7 +37,7 @@ export class AuthService {
 
         const { accessToken, refreshToken } = await this.tokenProvider.generateToken(id, role);
 
-        await this.repository.member.update({
+        await this.repository.$primary().member.update({
             data: { lastLoginAt: dayjs().toDate() },
             where: { id },
         });

@@ -1,11 +1,11 @@
 import { Global, Inject, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 
-import { MysqlAdapterProvider } from './mysql.adapter';
+import { MysqlAdapterProvider, MysqlReadReplicaAdapterProvider } from './mysql.adapter';
 import { REPOSITORY, Repository, RepositoryProvider } from './repository';
 
 @Global()
 @Module({
-    providers: [RepositoryProvider, MysqlAdapterProvider],
+    providers: [RepositoryProvider, MysqlAdapterProvider, MysqlReadReplicaAdapterProvider],
     exports: [REPOSITORY],
 })
 export class DaoModule implements OnModuleInit, OnModuleDestroy {

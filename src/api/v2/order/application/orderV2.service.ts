@@ -26,8 +26,9 @@ export class OrderV2Service {
             for (const orderItem of requestedData) {
                 const { itemId, quantity } = orderItem;
 
-                const item = await tx.$kysely
-                    .selectFrom('items')
+                const item = await tx
+                    .$primary()
+                    .$kysely.selectFrom('items')
                     .selectAll()
                     .where('id', '=', Number(itemId))
                     .forUpdate()
