@@ -1,6 +1,8 @@
 # nestjs-prisma-demo
 NestJS와 Prisma를 사용해서 Demo Server를 제작합니다.
 
+프로덕션에 적용 가능한 수준의 설정을 포함합니다.
+
 ## 사용 기술
 - NestJS
 - Prisma
@@ -9,6 +11,212 @@ NestJS와 Prisma를 사용해서 Demo Server를 제작합니다.
 - Redis
 - Redlock
 - BullMQ
+
+## Prisma Read Replicas 설정
+
+### 왜 Read Replicas를 사용하는가?
+
+**성능과 확장성**
+- 대부분의 애플리케이션에서 읽기(SELECT) 비율이 쓰기(INSERT/UPDATE/DELETE)보다 훨씬 높음
+- 읽기 부하를 별도의 replica 서버로 분산하여 primary DB의 부담 감소
+- Primary는 쓰기에만 집중하고, Replica는 읽기만 처리하여 전체 처리량 향상
+
+**가용성**
+- Primary DB 장애 시 Replica를 승격시켜 빠른 복구 가능
+- 백업, 분석 등의 무거운 쿼리를 replica에서 실행하여 운영 DB에 영향 최소화
+
+### 동작 방식
+- **읽기 쿼리** (SELECT): 자동으로 read replica로 라우팅
+- **쓰기 쿼리** (INSERT, UPDATE, DELETE): primary로 라우팅
+- **트랜잭션**: 항상 primary에서 실행
+
+### 로그 구분
+쿼리 로그에서 primary와 replica를 구분할 수 있습니다:
+- Primary: `type: 'PRISMA QUERY'`
+- Replica: `type: 'PRISMA REPLICA QUERY'`
+
+### 주의사항
+- **복제 지연(Replication Lag)**: Replica는 primary의 변경사항을 비동기로 복제하므로 짧은 지연 발생 가능
+  - 방금 쓴 데이터를 즉시 읽어야 하는 경우 주의 필요
+  - 최신 데이터가 중요한 경우 명시적으로 primary 사용 고려
+
+## 동시성 제어와 락 전략
+
+### 멀티 인스턴스 환경에서의 락 전략
+
+**상황**: 멀티 인스턴스(Node.js) + 단일 DB(Primary + Replica) + 한 품목에 동시 다수 요청
+
+**결론**: 멀티 인스턴스에서 프로세스(노드) 레벨 락은 무의미하며, **공통 자원(DB or Redis) 기준으로 락을 잡아야 함**
+
+### 1. 통하지 않는 방법들
+
+❌ **Node.js 인스턴스 내부의 Mutex/Lock**
+- `const lock = new Mutex()` 같은 방식
+- 인스턴스 A에서만 동작하고 B, C는 모름
+- 동일한 품목을 여러 인스턴스가 동시에 갱신 가능
+
+❌ **싱글 스레드라서 안전하다는 착각**
+- 한 프로세스 내에서는 JS 코드가 싱글 스레드지만
+- 인스턴스가 여러 개면 결국 DB로 동시에 요청
+
+✅ **해결책**: 공유 자원 기준 락
+- DB 트랜잭션 / 행 락
+- Redis 분산락
+- 메시지 브로커(큐) 기반 직렬화
+
+### 2. DB 행 락 (SELECT ... FOR UPDATE) - 기본 전략
+
+**가장 기본적이고 권장되는 방법**
+
+#### 개념
+- 모든 갱신 로직을 트랜잭션 안에서 처리
+- 해당 품목 row를 `SELECT ... FOR UPDATE`로 읽어서 행 단위 락 획득
+- 연산/검증 후 UPDATE하고 COMMIT
+- 동시에 다른 인스턴스에서 같은 row를 FOR UPDATE 시도 → DB가 알아서 대기/순차 처리
+
+#### SQL 흐름
+```mysql-sql
+-- 1) 트랜잭션 시작
+START TRANSACTION;
+
+-- 2) 해당 품목 row 락 잡기
+SELECT *
+FROM item
+WHERE id = 123
+FOR UPDATE;
+
+-- 3) 재고 검증 후
+-- 4) UPDATE
+UPDATE item
+SET quantity = quantity - 10
+WHERE id = 123;
+
+-- 5) 커밋
+COMMIT;
+```
+
+✅ **멀티 인스턴스 환경에서도 문제없음** - DB 한 곳에서 락을 잡아 일관성 보장
+
+### 3. Primary + Read Replica 환경 주의사항
+
+**락은 무조건 Primary에서만 의미 있음**
+
+- 쓰기/갱신/락 관련 쿼리는 전부 Primary로 전송
+- `SELECT ... FOR UPDATE`는 반드시 Primary
+- Replica는 조회 전용, 심지어 "바로 직후 읽어야 하는 값"도 Primary 사용 권장
+  - 이유: 복제 지연(Replication Lag)
+
+### 4. 낙관적 락 (Optimistic Lock)
+
+**충돌 재시도를 허용할 수 있는 경우 사용**
+
+#### 개념
+- 테이블에 `version` 컬럼 추가
+- 읽을 때 `id, quantity, version` 함께 조회
+- 업데이트 시 `WHERE id = ? AND version = ?` 조건
+- `affectedRows === 0`이면 다른 트랜잭션이 먼저 수정 → 재시도 or 실패 처리
+
+#### SQL 예시
+```sql
+UPDATE item
+SET quantity = quantity - 10,
+    version = version + 1
+WHERE id = 123
+  AND version = 5;
+```
+
+업데이트 결과 `affectedRows`가 0이면 다른 트랜잭션이 먼저 수정한 것이므로 재시도 또는 실패 처리합니다.
+
+**장점**: DB 락으로 인한 wait/timeout 감소
+**단점**: 충돌 시 재시도 로직 필요
+
+### 5. Redis 분산 락
+
+**DB 락 외에 전역 락이 필요한 경우**
+
+#### 개념
+- `item:123:lock` 같은 키에 SET NX + expire로 락 설정
+- 품목 단위로 전역 락 관리
+
+#### 코드 예시 (ioredis)
+```ts
+import Redis from 'ioredis';
+const redis = new Redis();
+
+async function withItemLock<T>(
+  itemId: number,
+  fn: () => Promise<T>,
+): Promise<T> {
+  const lockKey = `lock:item:${itemId}`;
+  const lockValue = `${Date.now()}-${Math.random()}`;
+  const ttlMs = 5000; // 5초
+
+  // SET NX PX
+  const acquired = await redis.set(lockKey, lockValue, 'PX', ttlMs, 'NX');
+
+  if (!acquired) {
+    throw new Error('Lock not acquired');
+  }
+
+  try {
+    return await fn();
+  } finally {
+    // value 체크 후 삭제
+    const current = await redis.get(lockKey);
+    if (current === lockValue) {
+      await redis.del(lockKey);
+    }
+  }
+}
+
+// 사용 예시
+async function decreaseStockWithRedisLock(itemId: number, amount: number) {
+  return withItemLock(itemId, async () => {
+    await decreaseStock(itemId, amount);
+  });
+}
+```
+
+⚠️ **주의**: Redis 분산락은 네트워크 파티션/Redis 장애/클럭 드리프트에 민감
+→ DB 트랜잭션 + 제약조건이 여전히 마지막 방어선이어야 함
+
+**권장 패턴**:
+- 1차 보호: DB unique constraint, check constraint, foreign key
+- 추가 최적화/순서 제어용: Redis 락 or 큐잉
+
+### 6. 같은 품목에 대한 대량 요청 처리
+
+**7000 요청이 전부 같은 item_id를 갱신하는 상황**
+
+어떤 락이든 결국 직렬화는 피할 수 없음 → 아키텍처적 대응 필요
+
+#### 옵션 1: 큐 기반 직렬화
+- BullMQ, Kafka(partition by itemId), SQS FIFO, Redis Stream 등
+- **같은 itemId는 같은 파티션/그룹으로 보내 한 워커가 순차 처리**
+- 예: BullMQ의 경우 `jobId`를 itemId로 설정하거나, Kafka는 partition key로 itemId 사용
+
+#### 옵션 2: 배치 처리
+- 요청을 바로 DB 반영하지 않고 delta를 쌓아두었다가
+- 특정 주기마다 합산해서 한 번에 처리
+
+### 7. 전략 선택 가이드
+
+**기본값: DB 행 단위 락 (Pessimistic Locking)**
+- 모든 갱신 로직을 트랜잭션으로 감싸기
+- `SELECT ... FOR UPDATE` (Kysely: `.forUpdate()`)
+- 해당 쿼리는 무조건 Primary로 전송
+
+**Read Replica 사용 규칙**
+- 쓰기/락/강한 일관성 조회: Primary
+- 통계/목록/캐시성 조회: Replica
+
+**충돌 재시도 허용 가능 시: 낙관적 락**
+- `version` 컬럼 + `WHERE id=? AND version=?`
+- 실패 시 재시도/실패 처리
+
+**추가 직렬화/성능 필요 시**
+- Redis 분산락 or BullMQ/Kafka/SQS FIFO
+- **같은 itemId는 같은 워커에서 순차 처리** 구조 설계
 
 ## Redis & Redlock 설정 가이드
 
