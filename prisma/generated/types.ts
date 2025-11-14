@@ -1,73 +1,63 @@
-import type { ColumnType } from 'kysely';
-
-export type Generated<T> =
-    T extends ColumnType<infer S, infer I, infer U> ? ColumnType<S, I | undefined, U> : ColumnType<T, T | undefined, T>;
+import type { ColumnType } from "kysely";
+export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
+  ? ColumnType<S, I | undefined, U>
+  : ColumnType<T, T | undefined, T>;
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
-export const MemberRole = {
-    ADMIN: 'ADMIN',
-    SELLER: 'SELLER',
-    CUSTOMER: 'CUSTOMER',
-    GUEST: 'GUEST',
-} as const;
-export type MemberRole = (typeof MemberRole)[keyof typeof MemberRole];
-export const ItemSaleStatus = {
-    ALLOW: 'ALLOW',
-    DENY: 'DENY',
-} as const;
-export type ItemSaleStatus = (typeof ItemSaleStatus)[keyof typeof ItemSaleStatus];
+import type { MemberRole, ItemSaleStatus } from "./enums";
+
 export type Item = {
     id: Generated<number>;
     name: string;
-    supply_price: string;
+    supplyPrice: string;
     vat: string;
-    total_price: string;
-    is_tax_free: Generated<number>;
+    totalPrice: string;
+    isTaxFree: Generated<number>;
     sku: string;
     stock: Generated<number>;
     description: string | null;
-    item_sale_status: Generated<ItemSaleStatus>;
-    created_at: Generated<Timestamp>;
-    updated_at: Generated<Timestamp>;
-    deleted_at: Timestamp | null;
-    member_id: number;
+    itemSaleStatus: Generated<ItemSaleStatus>;
+    createdAt: Generated<Timestamp>;
+    updatedAt: Generated<Timestamp>;
+    deletedAt: Timestamp | null;
+    memberId: number;
 };
 export type Member = {
     id: Generated<number>;
     name: string;
     email: string;
-    hashed_password: string | null;
+    hashedPassword: string | null;
     phone: string;
     role: Generated<MemberRole>;
-    last_login_at: Timestamp | null;
-    membership_at: Timestamp | null;
-    created_at: Generated<Timestamp>;
-    updated_at: Generated<Timestamp>;
-    deleted_at: Timestamp | null;
+    lastLoginAt: Timestamp | null;
+    membershipAt: Timestamp | null;
+    createdAt: Generated<Timestamp>;
+    updatedAt: Generated<Timestamp>;
+    deletedAt: Timestamp | null;
 };
 export type Order = {
     id: Generated<number>;
-    order_number: string;
-    total_price: string;
-    created_at: Generated<Timestamp>;
-    updated_at: Generated<Timestamp>;
-    deleted_at: Timestamp | null;
-    member_id: number;
+    orderNumber: string;
+    totalPrice: string;
+    createdAt: Generated<Timestamp>;
+    updatedAt: Generated<Timestamp>;
+    deletedAt: Timestamp | null;
+    memberId: number;
 };
 export type OrderItem = {
     id: Generated<number>;
     price: string;
     quantity: Generated<number>;
-    is_tax_free: Generated<number>;
-    created_at: Generated<Timestamp>;
-    updated_at: Generated<Timestamp>;
-    deleted_at: Timestamp | null;
-    item_id: number;
-    order_id: number;
+    isTaxFree: Generated<number>;
+    createdAt: Generated<Timestamp>;
+    updatedAt: Generated<Timestamp>;
+    deletedAt: Timestamp | null;
+    itemId: number;
+    orderId: number;
 };
 export type DB = {
     items: Item;
     members: Member;
-    order_items: OrderItem;
+    orderItems: OrderItem;
     orders: Order;
 };

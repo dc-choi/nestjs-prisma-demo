@@ -1,15 +1,16 @@
 const stockRaceCondition = () => {
-    const orderApi = 'http://localhost:3000/api/v3/orders';
+    const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZW1iZXJJZCI6IjEiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjMwOTE3MDIsImV4cCI6MTc2MzA5ODkwMn0.FdT7OB7iqC3zHZC_CosuT_v8B8aCda_1dp7cLDkUE-c`;
+    const orderApi = 'http://localhost:3000/api/v2/orders';
     const orderData = {
         headers: {
-            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZW1iZXJJZCI6IjEiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTE4ODMzNDQsImV4cCI6MTc1MTg5MDU0NH0.lRk3zIFY6iYY8jnLDoG0gSTm3hinIKiDhPB8wnhE6yw`,
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
         },
         method: 'POST',
         body: JSON.stringify({
             data: [
                 {
-                    itemId: '1',
+                    itemId: '56',
                     quantity: 1,
                 },
             ],

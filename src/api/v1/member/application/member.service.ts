@@ -62,11 +62,11 @@ export class MemberService {
                     'm.email as email',
                     'm.phone as phone',
                     'm.role as role',
-                    'm.last_login_at as lastLoginAt',
-                    'm.created_at as createdAt',
+                    'm.lastLoginAt as lastLoginAt',
+                    'm.createdAt as createdAt',
                 ])
                 // .forUpdate() // lock도 가능
-                .where('m.deleted_at', 'is', null)
+                .where('m.deletedAt', 'is', null)
                 .execute()
                 .then((results) =>
                     results.map(({ id, name, email, phone, role, lastLoginAt, createdAt }) => ({

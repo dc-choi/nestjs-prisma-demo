@@ -17,13 +17,27 @@ Authorization: Bearer {{accessToken}}
 {
   "data": [
     {
-      "itemId": 18,
-      "quantity": 2
+      "itemId": "56",
+      "quantity": 1
     }
   ]
 }
 
-### order
+### order-v2
+POST localhost:3000/api/v2/orders
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "data": [
+    {
+      "itemId": "56",
+      "quantity": 1
+    }
+  ]
+}
+
+### order-v3
 POST localhost:3000/api/v3/orders
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
@@ -31,8 +45,8 @@ Authorization: Bearer {{accessToken}}
 {
   "data": [
     {
-      "itemId": 1,
-      "quantity": 2
+      "itemId": "56",
+      "quantity": 1
     }
   ]
 }
